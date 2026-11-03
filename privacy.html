@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Better WiSE Page — Privacy Policy</title>
+<meta name="description" content="Privacy policy for the Better WiSE Page browser extension." />
+<style>
+  :root{
+    --purple:#64346f; --purple-d:#4a2452; --gold:#b39037;
+    --ink:#1b1220; --muted:#6c5a74; --line:#e7dced; --bg:#faf7fb;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.7 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding:48px 20px 96px;
+  }
+  main{max-width:720px;margin:0 auto}
+  header{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:32px}
+  .mark{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+  .mark svg{width:26px;height:26px;flex:none}
+  .mark span{font-size:14px;letter-spacing:.02em;color:var(--muted)}
+  h1{font-size:30px;line-height:1.25;margin:0 0 10px;letter-spacing:-.01em}
+  .meta{margin:0;font-size:14px;color:var(--muted)}
+  h2{font-size:19px;margin:36px 0 10px;letter-spacing:-.005em}
+  h2:first-of-type{margin-top:0}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px;padding-left:22px}
+  li{margin-bottom:6px}
+  a{color:var(--purple);text-underline-offset:2px}
+  a:hover{color:var(--purple-d)}
+  .callout{
+    border-left:3px solid var(--gold); background:#fdf9ef;
+    padding:14px 18px; margin:0 0 18px; border-radius:0 6px 6px 0;
+  }
+  .callout p:last-child{margin-bottom:0}
+  table{border-collapse:collapse;width:100%;margin:0 0 18px;font-size:15px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;width:38%}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  @media (prefers-color-scheme: dark){
+    :root{--ink:#f2ecf5;--muted:#a99bb2;--line:#3a2c40;--bg:#171019}
+    a{color:#d9b3e6}
+    .callout{background:#221722;border-left-color:#cda955}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" stroke="#64346f" stroke-width="1.4" opacity=".35"/>
+        <path d="M6 16c1.6-1 2.6-2.6 3.2-4.6M18 16c-1.6-1-2.6-2.6-3.2-4.6" stroke="#b39037" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="12" cy="9.5" r="3.1" stroke="#64346f" stroke-width="1.4"/>
+      </svg>
+      <span>Better WiSE Page</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Effective 4 November 2026 &middot; Last updated 4 November 2026</p>
+  </header>
+
+  <p>Better WiSE Page is a browser extension that improves the Wesley College WiSE learning platform.
+  This page explains exactly what the extension reads, where that data goes, and what it never does.
+  It is written to match what the shipped code actually does.</p>
+
+  <h2>What the extension does</h2>
+  <p>It runs only on <code>wise.wesleycollege.net</code> and adds a few things to that site: your next class,
+  a to-do list built from course announcements, an expandable timetable, and faster in-site search.
+  Nothing is collected on any other website, and the extension does not run anywhere else.</p>
+
+  <h2>What it reads</h2>
+  <ul>
+    <li>Page content you can already see while signed in to WiSE: class names, course announcements
+      (title and body text), timetable periods, and due dates. This is used only to draw cards and summaries on the page.</li>
+    <li>Settings you enter yourself: display and animation preferences, background colours, and — only if you
+      enable AI features — the API endpoint and API key you provide.</li>
+  </ul>
+  <p>The extension does not read your password, other tabs, your browsing history, your clipboard, or local files.
+  It does not use cookies for tracking and does not inject anything into pages you visit outside WiSE.</p>
+
+  <h2>Where your data lives</h2>
+  <table>
+    <tr><th>Storage</th><td>Your own browser profile, via <code>chrome.storage.local</code> and <code>chrome.storage.sync</code>.</td></tr>
+    <tr><th>Server-side storage</th><td>None. The developer has no backend and receives no data.</td></tr>
+    <tr><th>Removal</th><td>Use <em>Clear all caches</em> in the extension settings, or uninstall the extension.</td></tr>
+  </table>
+
+  <h2>When data leaves your device</h2>
+  <div class="callout">
+    <p>Only if you turn on <em>Use AI to optimise task list</em> and supply your own API key.</p>
+  </div>
+  <p>In that case the extension sends the title and body text of course announcements, plus a prompt,
+  straight from your browser to the AI endpoint you configured — by default the
+  <a href="https://ai.google.dev/gemini-api/terms" rel="noopener">Google Gemini API</a>. The request goes
+  from your machine directly to that provider; it does not pass through the developer. How Google handles
+  that content is governed by Google's own API terms and privacy policy.</p>
+  <p>With AI features switched off — the default — the extension makes no external requests at all.
+  Beyond that endpoint, the only hosts the extension is permitted to contact are
+  <code>wise.wesleycollege.net</code> (the site itself) and <code>login.microsoftonline.com</code>
+  (Microsoft sign-in, if your session needs refreshing).</p>
+
+  <h2>What it never does</h2>
+  <ul>
+    <li>No accounts, no sign-up, no email address collected.</li>
+    <li>No analytics, telemetry, crash reporting, or advertising SDKs.</li>
+    <li>No sale, rental, or sharing of data with advertisers or data brokers.</li>
+    <li>No remote code — all logic ships inside the extension package.</li>
+  </ul>
+
+  <h2>Student data</h2>
+  <p>The extension is used by students at Wesley College, and course announcements may concern minors.
+  That content stays in your own browser and is used only to generate summaries you can see.
+  The developer cannot access it. The single exception is described above: when you deliberately enable
+  the AI feature, announcement text is sent to the AI provider you selected, under your own API account.</p>
+
+  <h2>Your control</h2>
+  <p>You can disable AI features, clear all locally stored data, or uninstall the extension at any time from
+  the extension's settings page or your browser's extension manager. Nothing persists anywhere else.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If the extension's data practices change, the date at the top of this page is updated and the change is
+  noted in the extension's release notes. Material changes will be described in the store listing update.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy or the extension: <a href="mailto:chris.guo@wesleycollege.edu.au">chris.guo@wesleycollege.edu.au</a></p>
+
+  <footer>
+    Better WiSE Page is an independent student project and is not an official Wesley College product.
+  </footer>
+</main>
+</body>
+</html>
