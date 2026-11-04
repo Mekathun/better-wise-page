@@ -2,7 +2,7 @@
 
 A browser extension for the Wesley College WiSE platform. Test builds are published here.
 
-**Latest: [v0.1.0](https://github.com/Mekathun/better-wise-page/releases/latest)** ·
+**Latest: [v0.1.1](https://github.com/Mekathun/better-wise-page/releases/latest)** ·
 **Download page: https://mekathun.github.io/better-wise-page/** ·
 **Privacy: https://mekathun.github.io/better-wise-page/privacy.html**
 
@@ -14,7 +14,7 @@ no server. What it reads stays in your browser profile.
 
 ### Install
 
-1. Download `Better_WiSE_v0.1.0.zip` from the latest release and unzip it. The folder must
+1. Download `Better_WiSE_v0.1.1.zip` from the latest release and unzip it. The folder must
    contain `manifest.json` at the top.
 2. Open `edge://extensions` and switch on Developer mode.
 3. Click Load unpacked and pick that folder.
@@ -44,7 +44,7 @@ Questions: chris.guo@wesleycollege.edu.au
 
 ### 安装
 
-1. 从最新 release 下载 `Better_WiSE_v0.1.0.zip` 并解压。解压出来的文件夹第一层要能直接看到
+1. 从最新 release 下载 `Better_WiSE_v0.1.1.zip` 并解压。解压出来的文件夹第一层要能直接看到
    `manifest.json`。
 2. 地址栏打开 `edge://extensions`，打开左侧的「开发者模式」。
 3. 点「加载解压缩的扩展」，选中刚才那个文件夹。
