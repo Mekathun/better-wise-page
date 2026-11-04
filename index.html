@@ -1,40 +1,181 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Better WiSE Page</title>
-<meta name="description" content="Better WiSE Page — a browser extension that improves the WiSE learning platform." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Better WiSE Page · beta 0.1.0</title>
+<meta name="description" content="Test build of Better WiSE Page, a browser extension that rebuilds the Wesley College WiSE home page.">
 <style>
-  :root{--ink:#1b1220;--muted:#6c5a74;--purple:#64346f;--bg:#faf7fb;--line:#e7dced}
-  body{
-    margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);
-    font:16px/1.7 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:32px
+  :root{
+    --purple:#64346f; --purple-d:#4a2452; --gold:#b39037; --cream:#f0dca0;
+    --ink:#241a2c; --ink-2:#5b4d67; --line:rgba(100,52,111,.14);
+    --bg:#faf7fc; --card:#ffffff; --shadow:0 10px 30px rgba(100,52,111,.10);
   }
-  main{max-width:560px;width:100%}
-  h1{font-size:28px;margin:0 0 6px;letter-spacing:-.01em}
-  p{margin:0 0 18px;color:var(--muted)}
-  .links{display:flex;flex-wrap:wrap;gap:12px}
-  a.btn{
-    display:inline-block;padding:11px 18px;border-radius:999px;text-decoration:none;
-    border:1px solid var(--line);background:#fff;color:var(--purple);font-weight:600;font-size:15px
-  }
-  a.btn:hover{border-color:var(--purple)}
-  footer{margin-top:32px;font-size:13px;color:var(--muted)}
   @media (prefers-color-scheme: dark){
-    :root{--ink:#f2ecf5;--muted:#a99bb2;--bg:#171019;--line:#3a2c40}
-    a.btn{background:#221722;color:#d9b3e6}
+    :root{ --ink:#f4eef8; --ink-2:#b9a9c6; --line:rgba(240,220,160,.16);
+      --bg:#16111b; --card:#1f1826; --shadow:0 10px 30px rgba(0,0,0,.35); }
   }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(240,220,160,.22), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:56px 20px 72px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--purple);font-weight:650;
+  }
+  @media (prefers-color-scheme: dark){ .eyebrow{color:var(--cream)} }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(179,144,55,.16)}
+  h1{font-size:clamp(28px,5vw,40px);line-height:1.15;letter-spacing:-.02em;margin:14px 0 10px}
+  h1 .v{
+    font-size:.44em;font-weight:600;vertical-align:middle;margin-left:10px;
+    padding:3px 9px;border-radius:999px;color:var(--purple);
+    background:rgba(240,220,160,.45);letter-spacing:0;
+  }
+  @media (prefers-color-scheme: dark){ h1 .v{color:#2a1c33;background:var(--cream)} }
+  .lede{color:var(--ink-2);margin:0 0 30px;max-width:56ch}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:26px 26px 22px;box-shadow:var(--shadow);
+  }
+  h2{font-size:15px;letter-spacing:.02em;margin:0 0 14px;color:var(--ink)}
+  .dl{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 8px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:13px 20px;border-radius:14px;text-decoration:none;font-weight:600;font-size:15px;
+    border:1px solid transparent;transition:transform .12s ease,box-shadow .2s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{
+    color:#fff;background:linear-gradient(180deg,#74407f,var(--purple));
+    box-shadow:0 6px 16px rgba(100,52,111,.28),inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .btn-primary:hover{box-shadow:0 8px 22px rgba(100,52,111,.34),inset 0 1px 0 rgba(255,255,255,.26)}
+  .btn-ghost{color:var(--purple);background:transparent;border-color:var(--line)}
+  @media (prefers-color-scheme: dark){ .btn-ghost{color:var(--cream)} }
+  .btn small{font-weight:450;opacity:.72;font-size:12.5px}
+  .hint{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+  ol.steps{margin:22px 0 0;padding:0;list-style:none;counter-reset:s}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 14px 38px;
+    color:var(--ink-2);font-size:14.5px;line-height:1.55;
+  }
+  ol.steps li:last-child{padding-bottom:0}
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:1px;
+    width:24px;height:24px;border-radius:50%;
+    display:grid;place-items:center;font-size:12.5px;font-weight:650;
+    color:var(--purple);background:rgba(100,52,111,.09);
+    border:1px solid rgba(100,52,111,.16);
+  }
+  @media (prefers-color-scheme: dark){
+    ol.steps li::before{color:var(--cream);background:rgba(240,220,160,.10);border-color:rgba(240,220,160,.2)}
+  }
+  ol.steps code, .card code{
+    font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    background:rgba(100,52,111,.08);padding:2px 6px;border-radius:6px;
+    color:var(--purple-d);word-break:break-word;
+  }
+  @media (prefers-color-scheme: dark){
+    ol.steps code,.card code{background:rgba(240,220,160,.10);color:var(--cream)}
+  }
+  .split{display:grid;gap:14px;margin-top:26px}
+  @media (min-width:620px){ .split{grid-template-columns:1fr 1fr} }
+  .mini{
+    border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+    font-size:14px;color:var(--ink-2);background:linear-gradient(180deg,rgba(100,52,111,.03),transparent);
+  }
+  .mini h3{margin:0 0 6px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--purple)}
+  @media (prefers-color-scheme: dark){ .mini h3{color:var(--cream)} }
+  .mini p{margin:0}
+  details{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+  summary{cursor:pointer;font-size:14px;color:var(--purple);font-weight:600;outline:none}
+  @media (prefers-color-scheme: dark){ summary{color:var(--cream)} }
+  details ol{margin:12px 0 0;padding-left:20px;color:var(--ink-2);font-size:14.5px}
+  details li{margin:6px 0}
+  footer{
+    margin-top:34px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;
+  }
+  footer a{color:var(--purple);text-decoration:none;border-bottom:1px solid rgba(100,52,111,.3)}
+  @media (prefers-color-scheme: dark){ footer a{color:var(--cream);border-bottom-color:rgba(240,220,160,.3)} }
+  a{color:inherit}
 </style>
 </head>
 <body>
-<main>
-  <h1>Better WiSE Page</h1>
-  <p>Next class, AI task cards and an expandable timetable for Wesley College WiSE.</p>
-  <div class="links">
-    <a class="btn" href="./privacy.html">Privacy policy</a>
+<div class="wrap">
+
+  <div class="eyebrow"><span class="dot"></span>Internal test build</div>
+  <h1>Better WiSE Page<span class="v">beta 0.1.0</span></h1>
+  <p class="lede">
+    An extension for the WiSE home page. It puts your next class and a to-do list made from
+    course announcements at the top, opens the timetable where you are, and makes site search
+    faster. This build is for people helping test it, so expect the odd rough edge.
+  </p>
+
+  <div class="card">
+    <h2>Download</h2>
+    <div class="dl">
+      <a class="btn btn-primary"
+         href="https://github.com/Mekathun/better-wise-page/releases/latest/download/Better_WiSE_v0.1.0.zip">
+        Download for Edge <small>zip · 208 KB</small>
+      </a>
+      <a class="btn btn-ghost"
+         href="https://github.com/Mekathun/better-wise-page/releases/latest/download/Better_WiSE_v0.1.0.crx">
+        .crx instead
+      </a>
+    </div>
+    <p class="hint">
+      Take the zip. Browsers refuse a <code>.crx</code> that arrives from a download link, so
+      the zip is the one that installs.
+    </p>
+
+    <ol class="steps">
+      <li>Unzip it somewhere permanent. The folder you end up with must have <code>manifest.json</code> at the top.</li>
+      <li>Open <code>edge://extensions</code> and switch on Developer mode in the left sidebar.</li>
+      <li>Click Load unpacked and pick that folder.</li>
+      <li>Open <code>wise.wesleycollege.net</code> and refresh. The page rebuilds itself; the toolbar button opens the settings.</li>
+    </ol>
   </div>
-  <footer>Not an official Wesley College product.</footer>
-</main>
+
+  <div class="split">
+    <div class="mini">
+      <h3>What it needs</h3>
+      <p>Your own WiSE login in the same browser. The extension has no account and no server.</p>
+    </div>
+    <div class="mini">
+      <h3>What it does with data</h3>
+      <p>Course pages are read on your machine and kept in your browser profile. Nothing is sent anywhere unless you turn on the AI features with your own API key.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>中文安装说明</summary>
+    <ol>
+      <li>解压 zip，确认文件夹第一层就能看到 <code>manifest.json</code>。</li>
+      <li>地址栏输入 <code>edge://extensions</code>，打开左侧的「开发者模式」。</li>
+      <li>点「加载解压缩的扩展」，选中刚才那个文件夹。</li>
+      <li>打开 <code>wise.wesleycollege.net</code> 刷新页面即可。工具栏上的扩展按钮是设置入口。</li>
+      <li>换版本时先在列表里移除旧的，再加载新文件夹。</li>
+    </ol>
+  </details>
+
+  <footer>
+    <span>0.1.0 · internal test</span>
+    <a href="https://mekathun.github.io/better-wise-page/privacy.html">Privacy policy</a>
+    <a href="https://github.com/Mekathun/better-wise-page/releases">All releases</a>
+    <a href="mailto:chris.guo@wesleycollege.edu.au">Send feedback</a>
+    <span>A student project, not an official Wesley College product.</span>
+  </footer>
+
+</div>
 </body>
 </html>
