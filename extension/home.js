@@ -1042,29 +1042,6 @@ section.wt-tt-sec{padding-left:8px;padding-right:8px;}
   font-size:12px;font-weight:600;line-height:1.5;letter-spacing:.01em;vertical-align:middle;
   background:rgba(100,52,111,.1);color:#64346f;border:1px solid rgba(100,52,111,.18);white-space:nowrap;}
 html[data-wt-theme="dark"] .wt-week-chip{background:rgba(190,150,255,.14);color:#d9c2ff;border-color:rgba(190,150,255,.26);}
-/* Day 选择器自己一颗胶囊，挂在周次胶囊右边。
-   以前把它塞进 .wt-week-chip 里当子节点，想让两者「看起来是一颗」：结果是原生 select
-   的箭头方块把胶囊右端顶出一个灰框，里面的 Day N 还比 Week N 高半行 ——
-   标题上明明写着 Day 1，胶囊里又挤进去一个 Day 1，整块就是歪的。
-   现在两颗胶囊并排，选择器只借胶囊的底色，边框/箭头全部自己画。 */
-.wt-day-pill{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;box-sizing:border-box;
-  height:22px;padding:0 7px 0 9px;border-radius:999px;
-  font-size:12px;font-weight:600;line-height:1;letter-spacing:.01em;vertical-align:middle;white-space:nowrap;
-  background:rgba(100,52,111,.1);color:#64346f;border:1px solid rgba(100,52,111,.18);cursor:pointer;}
-html[data-wt-theme="dark"] .wt-day-pill{background:rgba(190,150,255,.14);color:#d9c2ff;border-color:rgba(190,150,255,.26);}
-.wt-day-pill:focus-within{outline:2px solid currentColor;outline-offset:2px;}
-.wt-day-pill .wt-day-pick{appearance:none;-webkit-appearance:none;
-  border:0 !important;background:transparent !important;box-shadow:none !important;
-  color:inherit !important;font-family:inherit !important;font-size:12px !important;font-weight:600 !important;
-  line-height:1 !important;height:auto !important;min-height:0 !important;max-width:none !important;
-  width:auto !important;padding:0 !important;margin:0 !important;display:block;flex:0 0 auto;
-  text-transform:none !important;letter-spacing:inherit;cursor:pointer;text-align:left;}
-.wt-day-pill .wt-day-pick::-ms-expand{display:none;}
-.wt-day-pill .wt-day-pick option{background:#fff;color:#222;}
-html[data-wt-theme="dark"] .wt-day-pill .wt-day-pick option{background:#232326;color:#e8e6ee;}
-.wt-day-pill-chev{display:inline-flex;align-items:center;justify-content:center;
-  width:9px;height:9px;flex:0 0 auto;opacity:.72;pointer-events:none;}
-.wt-day-pill-chev svg{display:block;}
 /* 课表和下面那块内容之间补间距：站点相邻 row 的规则被中间那条隐藏的 row 打断了 */
 .row:has(table.timetable):not(.timetable-small){margin-bottom:14px;}
 /* 右上角：设置齿轮和通知铃铛之间留白，左边那些条目自然会往左让。
@@ -1150,6 +1127,8 @@ html[data-wt-theme="dark"] .wt-cal-note.wt-cal-fail{color:#f0938c;}
 `;
 
   let settings = { ...DEFAULT_SETTINGS };
+  /* 面板底色的重算入口：建面板时赋值，换主题时 applyTheme() 再调一次 */
+  let PANEL_PAINT_BG = null;
   let FRESH_ALL = (() => { try { return sessionStorage.getItem('wtFreshAll') === '1'; } catch { return false; } })();
   let WT_HOST = null;
   let BOOT_RETRY = 0;
@@ -1190,7 +1169,10 @@ html[data-wt-theme="dark"] .wt-cal-note.wt-cal-fail{color:#f0938c;}
     const box = ensureTopRow();
     if (!box) return false;
     node.classList.remove('wt-skel-block');
-    if (node.parentElement !== box) box.insertBefore(node, box.firstElementChild);
+    /* 标题在最上面，面板紧跟其后 */
+    const head = box.querySelector(':scope > .wt-tt-head');
+    const anchor = head ? head.nextSibling : box.firstElementChild;
+    if (node.parentElement !== box || node.previousElementSibling !== head) box.insertBefore(node, anchor);
     return true;
   }
   /* 面板该待在「Day x / Last school day」标题底下、课表上面。可标题是站点后来才渲染的
@@ -1202,14 +1184,15 @@ html[data-wt-theme="dark"] .wt-cal-note.wt-cal-fail{color:#f0938c;}
     if (!host) return;
     if (PLACE_WATCH) { try { PLACE_WATCH.disconnect(); } catch (e) { /* ignore */ } PLACE_WATCH = null; }
     const right = () => {
-      const h = document.querySelector('[data-timetable-header]');
-      return !!(h && h.parentElement && h.nextElementSibling === host);
+      const head = document.querySelector('.wt-tt-top > .columns > .wt-tt-head');
+      return !!(host && host.parentElement && host.parentElement.querySelector(':scope > .wt-tt-head') && head && head.nextElementSibling === host);
     };
     if (right()) return;
     const ensure = () => {
-      const h = document.querySelector('[data-timetable-header]');
-      if (h && h.parentElement) { if (h.nextElementSibling !== host) placePanel(host); return true; }
-      return false;
+      const head = ensureTtHead();
+      if (!head) return false;
+      if (head.nextElementSibling !== host) placePanel(host);
+      return true;
     };
     if (ensure()) return;
     let moves = 0;
@@ -2042,30 +2025,45 @@ function ttShownDay(head) {
   const base = TARGET_DAY || new Date();
   return base;
 }
+/* 站点自己那颗课表标题（"Day 5" / "Last school day"）。它住在站点课表区块里，
+   位置在面板下面，所以只当「站点发没发出今天那张表」的信号用，不再拿来显示。 */
+function siteTtHead() {
+  return [...document.querySelectorAll('[data-timetable-header]')].find((h) => !h.hasAttribute('data-wt-own')) || null;
+}
+/* 我们那颗标题挂在整宽行最上面，站点那颗原样留在下面 —— 不藏掉的话屏幕上有两条 Day N。
+   只是视觉隐藏，文本还留着（合成课表靠它的文字判断站点真表来没来）。 */
+function hideSiteHead() {
+  const h = siteTtHead();
+  if (h && !h.hasAttribute('data-wt-hide-head')) {
+    h.setAttribute('data-wt-hide-head', '1');
+    h.style.setProperty('display', 'none', 'important');
+  }
+}
+/* 标题文本：周中写「Day 5」，周末/假期写「Showing Monday 16 Nov」。
+   前缀看「今天」，日期看「表上排的那天」—— 周末站点排的是上一个/下一个上学日。 */
+function refreshHeadLabel(dayArg) {
+  const head = ensureTtHead();
+  if (!head) return null;
+  const day = dayArg || ttShownDay(head);
+  const todayRest = [0, 6].includes(new Date().getDay());
+  const txt = todayRest ? ('Showing ' + ttDayLabel(day)) : ttDayNumLabel(day);
+  const span = head.querySelector('.wt-tt-head-txt');
+  if (span && span.textContent !== txt) span.textContent = txt;
+  if (!todayRest) fillTtDayNum(head, day);
+  return head;
+}
 function ensureTtHead() {
-  const got = document.querySelector('[data-timetable-header]');
-  if (got) return got;
-  const sec = document.querySelector('section.wt-tt-sec');
-  if (!sec) return null;
-  /* 直接住进站点课表所在的那一格（row > .small-12 > section）。这一格的左右内边距、
-     页面偏移都是站点算好的，标题跟着它走，永远和下面的课表/卡片对齐；
-     自己另起一行再算 padding，会随滚动条宽度漂 8px。 */
-  /* 放进我们自己的整宽行，别插进站点的网格列（会把列撑爆）。 */
-  const holder = ensureTopRow() || sec.closest('.small-12') || sec.parentElement;
+  const holder = ensureTopRow();
   if (!holder) return null;
-  /* 周中写「Day 5」，周末/假期才写「Showing Monday 16 Nov」——
-     周中那句 Showing 是误伤：站点自己在周中会给出 Day 标题，我们只在它缺席时补，
-     而补的时候原来一律写 Showing，于是周中也冒出「Showing Friday 13 Nov」。 */
+  hideSiteHead();
+  const own = holder.querySelector(':scope > .wt-tt-head');
+  if (own) return own;
   const day = TARGET_DAY || new Date();
-  /* 前缀看「今天」，标题里的日期看「表上排的那天」。周末站点排的是上一个/下一个上学日，
-     所以要加 Showing 说明这不是今天；周中表上就是今天，写 Day N 就够。 */
   const todayRest = [0, 6].includes(new Date().getDay());
   const head = el('h2', { class: 'subheader wt-tt-head', 'data-timetable-header': '', 'data-wt-own': '1' },
     el('span', { class: 'wt-tt-head-txt' }, todayRest ? ('Showing ' + ttDayLabel(day)) : ttDayNumLabel(day)));
-  /* 顺序恒为「面板 → 标题」：标题底下马上就是课表 */
-  const panelEl = holder.querySelector('[data-wesley-home]');
-  if (panelEl && panelEl.parentElement === holder) panelEl.insertAdjacentElement('afterend', head);
-  else holder.insertBefore(head, holder.firstElementChild);
+  /* 顺序恒为「标题 → 面板 → 课表」：用户要 Day N 在最上面 */
+  holder.insertBefore(head, holder.firstElementChild);
   if (!todayRest) fillTtDayNum(head, day);
   return head;
 }
@@ -2076,7 +2074,19 @@ try { WT_DAYNUM = JSON.parse(localStorage.getItem('wtDayNum:v1') || '{}') || {};
 let TT_DAY_RESOLVER = null;   // main() 里赋值：async (Date) => Day 几 | null
 const wtDayKey = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 function ttDayNumLabel(day) {
-  const n = WT_DAYNUM[wtDayKey(day)];
+  const key = wtDayKey(day);
+  /* 站点那张表自己写着「Day N」：它排的就是今天，白捡一个真值，
+     不用等 /timetable 把十个 Day 列一一对过去。换天之后 TARGET_DAY 不是今天，
+     站点那行字就跟表上排的那天无关了，这时不许拿它当依据。 */
+  if (!WT_DAYNUM[key] && sameYMD(day, new Date())) {
+    const siteHead = siteTtHead();
+    const m = siteHead ? /Day\s*(\d{1,2})/i.exec(siteHead.textContent || '') : null;
+    if (m) {
+      WT_DAYNUM[key] = Number(m[1]);
+      try { localStorage.setItem('wtDayNum:v1', JSON.stringify(WT_DAYNUM)); } catch (e) { /* ignore */ }
+    }
+  }
+  const n = WT_DAYNUM[key];
   return n ? 'Day ' + n : ttDayLabel(day);
 }
 function fillTtDayNum(head, day) {
@@ -2100,17 +2110,12 @@ function activeHead() {
   }
   return ensureTtHead();
 }
-/* 把周次胶囊和 Day 选择器整颗搬到目标标题里（同一个元素，不复制）。
-   合成课表被拆掉、或标题被站点重画时都要靠它把这两颗胶囊跟着带过去。 */
+/* 把周次胶囊整颗搬到目标标题里（同一个元素，不复制）。
+   合成课表被拆掉、或标题被站点重画时都要靠它把胶囊跟着带过去。 */
 function parkChip(head) {
   if (!head) return;
   const chip = document.querySelector('.wt-week-chip');
-  const pill = document.querySelector('.wt-day-pill');
   if (chip && !head.contains(chip)) head.append(chip);
-  if (pill && !head.contains(pill)) {
-    const c = head.querySelector('.wt-week-chip');
-    if (c && c.parentElement === head) c.after(pill); else head.append(pill);
-  }
 }
 /* 站点的标题谁都只是显示，没有脚本读它的文本，所以往里塞一个 span 是安全的。 */
 function renderWeekChip() {
@@ -2128,7 +2133,6 @@ function renderWeekChip() {
     chip = el('span', { class: 'wt-week-chip' });
     head.append(chip);
   }
-  /* 胶囊里只有「Week N」这段文字，Day 选择器作为它的子节点，看起来是一颗胶囊。 */
   let weekTxt = chip.querySelector('.wt-week-txt');
   if (!weekTxt) {
     weekTxt = el('span', { class: 'wt-week-txt' });
@@ -2136,124 +2140,6 @@ function renderWeekChip() {
   }
   if (weekTxt.textContent !== label) weekTxt.textContent = label;
   chip.title = 'Week ' + info.week + ' of Term ' + info.term;
-  ensureDayPick(head);
-}
-
-/* 「这一页现在看的是第几天」只有一个真值：WT_SHOWN_DAY。
-   标题上的 Day N、胶囊里的选中值、底下的课表三者都跟它走。
-   以前只有 select 的 value 跟 localStorage 走，标题按「今天」算、课表按站点排的那天算，
-   一刷新三者就各说各的，用户看到的就是「Day 1 错位」。 */
-let WT_SHOWN_DAY = 0;
-function currentWeekKey() {
-  try { const i = schoolWeek(new Date()); return i && i.week ? (i.week + '@' + (i.term || '')) : ''; } catch (e) { return ''; }
-}
-function readPickedDay() {
-  try {
-    const raw = localStorage.getItem('wtPick:v1');
-    if (raw) { const o = JSON.parse(raw) || {}; return { day: Number(o.day) || 0, week: String(o.week || '') }; }
-  } catch (e) { /* ignore */ }
-  return { day: Number(localStorage.getItem('wtPickedDay')) || 0, week: '' };
-}
-/* 只认「同一教学周里选的」：上周挑了 Day 3，这周不该还停在那一天 */
-function pickedDayThisWeek() {
-  const p = readPickedDay();
-  if (!p.day) return 0;
-  const w = currentWeekKey();
-  return (p.week && w && p.week === w) ? p.day : 0;
-}
-function clearPickedDay() {
-  try { localStorage.removeItem('wtPick:v1'); localStorage.removeItem('wtPickedDay'); } catch (e) { /* ignore */ }
-}
-
-/* 手动选 Day：按 /timetable 星期表那一列重画课表，标题、胶囊、表一起换。
-   cached.manual 让这条链路的产物不被站点真表顶掉，也不写进「上一个上学日」缓存。 */
-let PICK_RUN = 0;
-/* 标题上的 Day N 和胶囊里的选中值都跟 WT_SHOWN_DAY 走。 */
-function syncPickUi(day) {
-  document.querySelectorAll('[data-timetable-header]').forEach((head) => {
-    if (head.getBoundingClientRect().height <= 0) return;
-    const txt = head.querySelector('.wt-tt-head-txt');
-    if (txt) txt.textContent = 'Day ' + day;
-    const sel = head.querySelector('.wt-day-pick');
-    if (sel) { sel.value = String(day); sel.dataset.day = String(day); }
-  });
-}
-/* 站点自己那颗标题上写的是第几天（把我们的胶囊排除掉再读文本，
-   否则会读到 select 里那串 "Day 1Day 2…"）。读不到返回 0。 */
-function siteShownDay() {
-  const h = [...document.querySelectorAll('[data-timetable-header]')].find((n) => !n.closest('.wt-tt-body'));
-  if (!h) return 0;
-  const txt = [...h.childNodes]
-    .filter((n) => n.nodeType === 3 || (n.nodeType === 1 && /wt-tt-head-txt/.test(n.className || '')))
-    .map((n) => n.textContent).join(' ');
-  const m = /Day\s*(\d{1,2})/i.exec(txt);
-  return m ? Number(m[1]) : 0;
-}
-async function applyPickedDay(n, opts) {
-  const day = Number(n) || 0;
-  if (!day) return;
-  /* 选的就是站点已经排好的那一天：别再多画一张合成表（刷新时会闪一下）。
-     只把三处状态对齐，课表还是站点那张。 */
-  if (siteShownDay() === day && !document.querySelector('.wt-tt-body')) {
-    WT_SHOWN_DAY = day;
-    syncPickUi(day);
-    if (opts && opts.persist) {
-      try { localStorage.setItem('wtPick:v1', JSON.stringify({ day: day, week: currentWeekKey(), at: Date.now() })); } catch (e) { /* ignore */ }
-    }
-    return;
-  }
-  WT_SHOWN_DAY = day;
-  syncPickUi(day);
-  if (opts && opts.persist) {
-    try { localStorage.setItem('wtPick:v1', JSON.stringify({ day: day, week: currentWeekKey(), at: Date.now() })); } catch (e) { /* ignore */ }
-  }
-  const run = ++PICK_RUN;
-  const cached = await gridDayCached(day);
-  if (run !== PICK_RUN) return;                    /* 连点两下只认最后一次 */
-  if (!cached) { if (opts && opts.persist) toast('No timetable for Day ' + day); return; }
-  cached.title = 'Day ' + day;
-  cached.manual = true;
-  document.querySelectorAll('.wt-tt-body').forEach((node) => node.remove());
-  WEEKEND_MODE = false;
-  await syntheticView(cached, true);
-}
-
-/* 周次胶囊右边那颗 Day 1..10 选择器：手动指定「这几天看第几教研日」。
-   站点只在自己渲染的标题里给 Day N，拿不到时（周末、凌晨、假期）就靠这个手动指。
-   它是独立一颗胶囊，住在标题里、周次胶囊的右侧 —— 别再塞进周次胶囊。 */
-function ensureDayPick(head) {
-  let pill = head.querySelector('.wt-day-pill');
-  let sel = pill ? pill.querySelector('.wt-day-pick') : null;
-  if (!pill || !sel) {
-    if (pill) pill.remove();
-    pill = el('span', { class: 'wt-day-pill' });
-    sel = el('select', { class: 'wt-day-pick', 'aria-label': 'Show which day' });
-    for (let i = 1; i <= 10; i += 1) sel.append(el('option', { value: String(i) }, 'Day ' + i));
-    sel.addEventListener('change', () => {
-      const n = Number(sel.value) || 1;
-      applyPickedDay(n, { persist: true });
-    });
-    const chev = el('span', { class: 'wt-day-pill-chev' });
-    chev.innerHTML = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
-    /* 站点（深色主题）对 select 下手很重：`html[data-wt-theme="dark"] #content select`
-       带 !important，权重里有一个 id，我们的类选择器压不过，于是胶囊里会冒出一块
-       深灰的方块。行内 !important 才是唯一稳定压过它的写法，只改这一颗 select。 */
-    try {
-      sel.style.setProperty('background', 'transparent', 'important');
-      sel.style.setProperty('background-color', 'transparent', 'important');
-      sel.style.setProperty('background-image', 'none', 'important');
-      sel.style.setProperty('color', 'inherit', 'important');
-      sel.style.setProperty('border', '0', 'important');
-      sel.style.setProperty('box-shadow', 'none', 'important');
-    } catch (e) { /* ignore */ }
-    pill.append(sel, chev);
-    const chip = head.querySelector('.wt-week-chip');
-    if (chip && chip.parentElement === head) chip.insertAdjacentElement('afterend', pill);
-    else head.append(pill);
-  }
-  const want = WT_SHOWN_DAY || pickedDayThisWeek() || Number(sel.dataset.day || 0) || Number(sel.value || 0);
-  if (want) { sel.value = String(want); sel.dataset.day = String(want); }
-  return pill;
 }
 
 function normItems(cls) {
@@ -5074,11 +4960,46 @@ function paintSiteDay(tbl, dayNum) {
         const siteTbl = document.querySelector('table.timetable.wt-table:not(.wt-tt-alt)');
         if (siteTbl && paintSiteDay) {
           const before = siteTbl.innerHTML;
-          if (await paintSiteDay(siteTbl, n)) {
-            window.__wtTtSwap = { grid: true, day, back: async () => {
-              siteTbl.innerHTML = before;
-              window.__wtTtSwap = null;
-            } };
+          /* 0.1.3.4 起这里是「原地改字直接换掉」，动画就这么丢了：用户点了 Next day，
+             表格内容瞬间跳成下一天。现在改成先克隆一张、在新表上改字，再让它从右边滑进来、
+             原表往左退；动画结束（460ms）把底层那张也改成同一天并撤掉图层，
+             这样站点每分钟的重绘不会把画面弹回今天。 */
+          const ttHost = siteTbl.closest('.scrollable') || siteTbl.parentElement;
+          const alt = siteTbl.cloneNode(true);
+          alt.classList.add('wt-tt-alt');
+          if (ttHost && await paintSiteDay(alt, n)) {
+            const back = async () => { siteTbl.innerHTML = before; clearSwap(); notifyDaySwap(null); };
+            window.__wtTtSwap = { grid: true, day, back };
+            const lowAnim = document.documentElement.classList.contains('wt-low-anim')
+              || (() => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+            if (lowAnim) {
+              paintSiteDay(siteTbl, n).catch(() => {});
+            } else {
+              ttHost.classList.add('wt-tt-alt-host');
+              ttHost.classList.add('wt-tt-clip');
+              alt.style.transform = 'translateX(110%)';
+              alt.style.opacity = '0';
+              ttHost.append(alt);
+              void alt.offsetWidth;
+              ttHost.classList.add('wt-tt-alt-live');
+              siteTbl.style.transform = 'translateX(-14%)';
+              siteTbl.style.opacity = '0.15';
+              alt.style.transform = 'none';
+              alt.style.opacity = '1';
+              setTimeout(() => {
+                if (!window.__wtTtSwap || window.__wtTtSwap.alt !== alt) return;
+                /* 图层已经到位：把底下的真表也换成这一天，再撤图层（内容一样，看不出接缝） */
+                paintSiteDay(siteTbl, n).then(() => {
+                  alt.remove();
+                  clearSwap();
+                  window.__wtTtSwap = { grid: true, day, back };
+                }).catch(() => {
+                  alt.remove();
+                  clearSwap();
+                  window.__wtTtSwap = { grid: true, day, back };
+                });
+              }, 460);
+            }
             notifyDaySwap(day);
             if (btn) { btn.textContent = '\u2039 Back'; btn.disabled = false; btn.removeAttribute('aria-busy'); }
             toast('Showing ' + day.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'short' }));
@@ -5096,6 +5017,7 @@ function paintSiteDay(tbl, dayNum) {
           if (todayCached) todayCached.title = 'Showing ' + new Date().toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'short' });
           document.querySelectorAll('.wt-tt-body').forEach((m) => m.remove());
           await syntheticView(todayCached, true);
+          notifyDaySwap(null);
         } };
         notifyDaySwap(day);
         if (btn) { btn.textContent = '\u2039 Back'; btn.disabled = false; btn.removeAttribute('aria-busy'); }
@@ -5310,25 +5232,36 @@ function paintSiteDay(tbl, dayNum) {
     }).catch(() => maybeNewsAlert(settings));
   } catch (e) { maybeNewsAlert(settings); }
   if (!window.__wtNewsWatch) { window.__wtNewsWatch = 1; startNewsWatch(); }
-  const bgAlpha = Math.max(0, Math.min(100, Number(settings.bgOpacity == null ? 100 : settings.bgOpacity))) / 100;
-  const effect = settings.bgEffect || 'none';
-  summary.classList.remove('wt-bg-frost', 'wt-bg-soft', 'wt-bg-grain', 'wt-bg-vignette');
-  body.classList.remove('wt-bg-frost', 'wt-bg-soft', 'wt-bg-grain', 'wt-bg-vignette');
-  if (effect !== 'none') body.classList.add('wt-bg-' + effect);
-  if (settings.bgMode === 'image' && settings.bgImage) {
-    body.style.backgroundImage = 'url("' + settings.bgImage + '")';
-    body.style.backgroundSize = 'cover';
-    body.style.backgroundPosition = 'center';
-  } else {
-    const mix = (c) => 'color-mix(in srgb, ' + (c || '#f7f2f9') + ' ' + Math.max(5, bgAlpha * 100) + '%, transparent)';
-    if (themeIsDark()) {
-      body.dataset.wtLightBg = 'linear-gradient(180deg, ' + mix(settings.bgFrom) + ', ' + mix(settings.bgTo) + ')';
-      body.style.backgroundImage = 'linear-gradient(180deg,#191519,#121013)';
-      body.style.backgroundColor = '#121013';
+  /* 面板底色的内联值必须能被主题重算：以前这段只在建面板时跑一次，
+     深色的 background-color:#121013 写进去就没人清，切回浅色以后
+     半透明的浅色渐变盖在这层黑底上 —— 用户看到的就是「面板还是黑的」。
+     现在包成一个函数，换主题时由 applyTheme() 再调一次。 */
+  const paintSummaryBg = () => {
+    const bgAlpha = Math.max(0, Math.min(100, Number(settings.bgOpacity == null ? 100 : settings.bgOpacity))) / 100;
+    const effect = settings.bgEffect || 'none';
+    summary.classList.remove('wt-bg-frost', 'wt-bg-soft', 'wt-bg-grain', 'wt-bg-vignette');
+    body.classList.remove('wt-bg-frost', 'wt-bg-soft', 'wt-bg-grain', 'wt-bg-vignette');
+    if (effect !== 'none') body.classList.add('wt-bg-' + effect);
+    if (settings.bgMode === 'image' && settings.bgImage) {
+      body.style.backgroundImage = 'url("' + settings.bgImage + '")';
+      body.style.backgroundSize = 'cover';
+      body.style.backgroundPosition = 'center';
+      body.style.backgroundColor = '';
     } else {
-      body.style.backgroundImage = 'linear-gradient(180deg, ' + mix(settings.bgFrom) + ', ' + mix(settings.bgTo) + ')';
+      body.style.backgroundSize = '';
+      body.style.backgroundPosition = '';
+      const mix = (c) => 'color-mix(in srgb, ' + (c || '#f7f2f9') + ' ' + Math.max(5, bgAlpha * 100) + '%, transparent)';
+      if (themeIsDark()) {
+        body.style.backgroundImage = 'linear-gradient(180deg,#191519,#121013)';
+        body.style.backgroundColor = '#121013';
+      } else {
+        body.style.backgroundImage = 'linear-gradient(180deg, ' + mix(settings.bgFrom) + ', ' + mix(settings.bgTo) + ')';
+        body.style.backgroundColor = '';     /* 交回 CSS 的 var(--wt-t-panel-2) */
+      }
     }
-  }
+  };
+  PANEL_PAINT_BG = paintSummaryBg;
+  paintSummaryBg();
   summary.style.setProperty('--wt-body-op', String((settings.bodyOpacity == null ? 55 : settings.bodyOpacity) / 100));
   const fontPct = settings.cardFontPct == null ? 125 : settings.cardFontPct;
   const sizePct = settings.cardSizePct == null ? 100 : settings.cardSizePct;
@@ -5650,12 +5583,6 @@ function paintSiteDay(tbl, dayNum) {
       pNo += 1;   // Homeroom 不占节次号，否则整排都会往后偏一位（第二列变成 Period 2）
       return ['Period ' + pNo, time];
     });
-    /* 标题用和我们自己那颗标题一样的结构（.wt-tt-head + 文本 span）：合成模式下
-       站点那一块整块被藏掉，周次胶囊和 Day 选择器住在它里面，不搬过来的话
-       用户就看不见 Week N / Day N 了。 */
-    const title = el('h2', { class: 'subheader wt-tt-head', 'data-timetable-header': '' },
-      el('span', { class: 'wt-tt-head-txt' },
-        cached.title || ('Showing ' + cached.day.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'short' }))));
     const thead = el('thead');
     const trh = el('tr');
     for (let i = 0; i < tm.length; i += 1) {
@@ -5714,7 +5641,9 @@ function paintSiteDay(tbl, dayNum) {
         'aria-label': 'Pick a day from a list',
         onclick: (e) => { e.stopPropagation(); try { if (window.__wtNextDayList) window.__wtNextDayList(); else openNextDay(allClasses()); } catch { /* ignore */ } },
       }, '\u2630')));
-    host.append(title, el('div', { class: 'row' }, el('div', { class: 'small-12 show-for-medium-up' }, ttSec)), mobile);
+    /* 标题由顶部那颗（.wt-tt-top 里的 .wt-tt-head）统一负责：它一直在面板上面，
+       合成表被拆掉重建也不会跟着消失，周次胶囊只需搬过去一次。 */
+    host.append(el('div', { class: 'row' }, el('div', { class: 'small-12 show-for-medium-up' }, ttSec)), mobile);
     return { host, table };
   }
 
@@ -5734,8 +5663,6 @@ function paintSiteDay(tbl, dayNum) {
   }
 
   async function weekendMode() {
-    /* 用户手动挑了一天（或在同一周里挑过），就看那一天，别再拿「上一个上学日」盖上去 */
-    if (WT_SHOWN_DAY) return false;
     // The calendar API knows which day last actually had classes, so it wins over
     // the local cache: a cache written on Wednesday must not be shown on Saturday
     // while Friday's timetable is available. The cache is the offline fallback.
@@ -5891,7 +5818,8 @@ async function wtGrid() {
     const cached = await todayFromGrid();
     if (!cached) return false;
     /* 手动挑了别的天：今天这张真表不许把它盖掉 */
-    if (WT_SHOWN_DAY && cached.gridDay && WT_SHOWN_DAY !== cached.gridDay) return false;
+    /* 站点发的是别的日子（换天/周末）就别再拿星期表去顶它 */
+
     return syntheticView(cached, true);
   }
   async function syntheticView(cached, isToday) {
@@ -5923,11 +5851,12 @@ async function wtGrid() {
     WEEKEND_DATA = cached.classes || [];
     LAST_CLASS_COUNT = WEEKEND_DATA.length;   /* 走的是合成课表，没跑 collectPeriods，别让它误判「读不到课表」 */
     /* 手动挑的那一天不算「上一个上学日」：写进缓存，下次断网/周末会把它当成真实的一天端出来 */
-    if (!cached.manual) saveDay(WEEKEND_DATA, cached.tmCodes || null, TARGET_DAY);
+    saveDay(WEEKEND_DATA, cached.tmCodes || null, TARGET_DAY);
+    refreshHeadLabel(TARGET_DAY);
     /* 站点自己的「上一个上学日」课表常常比我们晚几秒才渲染，那样屏幕上就是两张表。
        藏掉站点那张，只留我们这张（它带 Next day / ☰）。表没来就什么也不做。 */
     const hideSiteTable = () => {
-      const h = document.querySelector('[data-timetable-header]');
+      const h = siteTtHead();
       if (!h || !h.parentElement) return false;
       /* 只藏「站点那张表的外壳」，而且必须精确定位到标题这一层的直接子节点。
          以前是「凡是子孙里有 table.timetable 的兄弟都藏」，结果合成课表被面板带进
@@ -5954,7 +5883,7 @@ async function wtGrid() {
     /* 合成课表带自己的标题（面板 → 标题 → 表）。站点那一块（标题 + 它自己的表）
        在合成模式下整块藏掉，否则页面上会出现两个标题、两张表。只藏 section，
        别碰 .column-left —— 那一列里还有磁贴，藏掉整页就塌了。 */
-    const siteHead = [...document.querySelectorAll('[data-timetable-header]')].find((h) => !h.closest('.wt-tt-body'));
+    const siteHead = siteTtHead();
     const siteSec = siteHead ? siteHead.closest('section.wt-tt-sec') || siteHead.parentElement : null;
     const panelNow = document.querySelector('[data-wesley-home]');
     if (siteSec && !siteSec.contains(full) && !(panelNow && siteSec.contains(panelNow))) {
@@ -5964,7 +5893,7 @@ async function wtGrid() {
     /* 这块合成课表必须待在面板下面。标题和 .column-left 在同一个行里，
        插错位置就会「课表在上面、面板在下面」。所以每次 tick 都对一次位置。 */
     const placeSynth = () => {
-      const h = document.querySelector('[data-timetable-header]');
+      const h = siteTtHead();
       const panel = document.querySelector('[data-wesley-home]');
       /* 面板在就贴着面板摆；面板不在才退回按标题摆。 */
       if (panel && panel.parentElement) {
@@ -5986,22 +5915,19 @@ async function wtGrid() {
     renderWeekChip();
     let hideTicks = 0;
     const hideTimer = setInterval(() => {
-      /* 这块合成课表已经被删掉了（换天时 applyPickedDay 会清掉旧的 .wt-tt-body）。
+      /* 这块合成课表已经被删掉了（换天时会清掉旧的 .wt-tt-body）。
          以前定时器还在跑，placeSynth() 会把删掉的节点又插回面板后面，
          选一次 Day 5、再选 Day 1 就会在页面上叠出两张表。 */
       if (!full.isConnected) { clearInterval(hideTimer); return; }
       hideTicks += 1;
       /* 站点自己把今天的表发出来了（标题不再是 Last school day / Showing …）就让位给真表，
          否则一直盖着「上一个上学日」的课，用户看到的是错的。
-         两个例外：
-         ① 我们补的标题（data-wt-own="Day N"）不算「站点发出来了」，以前它自己被当成真表，
-            于是合成课表刚画好就被自己拆掉，来回闪；
-         ② 用户手动挑的那一天（cached.manual）本来就和今天不是同一天，站点真表不许顶掉它。 */
-      if (!cached.manual) {
-        const real = [...document.querySelectorAll('[data-timetable-header]')]
-          .find((h) => !h.closest('.wt-tt-body') && !h.hasAttribute('data-wt-own')
-            && !/last school day|^showing/i.test(h.textContent || ''));
-        if (real && document.querySelector('table.timetable:not(.wt-tt-body table)')) {
+         我们自己补的那颗标题（data-wt-own）不算「站点发出来了」：以前它被当成真表，
+         于是合成课表刚画好就被自己拆掉，来回闪。 */
+      {
+        const real = siteTtHead();
+        const realTxt = real ? String(real.textContent || '').trim() : '';
+        if (real && !/last school day|^showing/i.test(realTxt) && document.querySelector('table.timetable:not(.wt-tt-body table)')) {
           clearInterval(hideTimer);
           try { full.remove(); } catch (e) { /* ignore */ }
           document.querySelectorAll('[data-wt-hide-tt]').forEach((n) => {
@@ -6009,16 +5935,14 @@ async function wtGrid() {
             n.style.removeProperty('display');
           });
           WEEKEND_MODE = false;
-          WT_SHOWN_DAY = 0;          /* 让位给站点真表之后就不再是「手动看着某一天」 */
-          renderWeekChip();          /* 胶囊刚跟着合成表一起被拆掉，挂回站点标题里 */
+          renderWeekChip();
           toast('Showing today');
           return;
         }
       }
       placeSynth();
       hideSiteTable();
-      /* 手动挑的那天要一直压着站点表（换页/重绘都由 placeSynth + hideSiteTable 接着管） */
-      if (hideTicks > (cached.manual ? 600 : 40)) clearInterval(hideTimer);
+      if (hideTicks > 40) clearInterval(hideTimer);
     }, 500);
     try { await fetchPostsFor(WEEKEND_DATA); } catch (e) { /* ignore */ }
     await main();
@@ -6325,6 +6249,8 @@ function applyTheme(prefArg) {
   root.dataset.wtTheme = next;
   rememberTheme(pref);
   paintPageBackground();
+  /* 面板自己那层底色是内联写的，光换 data-wt-theme 换不掉它 */
+  try { if (typeof PANEL_PAINT_BG === 'function') PANEL_PAINT_BG(); } catch (e) { /* ignore */ }
 }
 
 /* main() 里那条 storage 监听要等抓完数据才挂上，在那之前（或者标签页在后台被冻过）改主题
@@ -6604,11 +6530,6 @@ document.documentElement.style.setProperty('--wt-spd', String(effSpeed));
     try { calibrateWeek(); } catch (e) { wtLog('week calibrate failed: ' + ((e && e.message) || e)); }
     renderWeekChip();
     buildSummary(state);
-    /* 上次手动挑的 Day 只要还在同一教学周，刷新后自动接上：胶囊、标题、课表一起回到那天。
-       不接的话刷新一次胶囊还写着 Day 3、课表却回到站点排的那天，两边对不上。
-       等 buildSummary 先把它自己那套（今天的表 / 上一个上学日）跑完再接管，免得抢跑。 */
-    const savedPick = pickedDayThisWeek();
-    if (savedPick) setTimeout(() => { if (!WT_SHOWN_DAY) applyPickedDay(savedPick, { persist: false }); }, 2200);
     /* 断网时（浏览器自己知道）就算抓到的是当天的缓存，也要说一声 */
     if (!CACHE_AT && navigator.onLine === false) {
       const last = loadCachedDay();
@@ -6638,10 +6559,7 @@ document.documentElement.style.setProperty('--wt-spd', String(effSpeed));
   function cleanupIfLeaving() {
     try {
       if (HOME_RE.test(location.pathname)) return;
-      document.querySelectorAll('[data-wesley-home],.wt-alert-wrap,.wt-page-dim,.wt-modal-overlay,dialog.wt-modal-dialog,.wt-loading,.wt-toast,.wt-tt-body,.wt-week-chip,.wt-day-pill').forEach((n) => n.remove());
-      /* 离开首页就不再是「手动看着某一天」的状态；回到首页时再按同一周里存下的选择接上 */
-      WT_SHOWN_DAY = 0;
-      PICK_RUN += 1;
+      document.querySelectorAll('[data-wesley-home],.wt-alert-wrap,.wt-page-dim,.wt-modal-overlay,dialog.wt-modal-dialog,.wt-loading,.wt-toast,.wt-tt-body,.wt-week-chip').forEach((n) => n.remove());
       /* Enhanced Calendar 是挂在站点 Calendar 岛上的，离开首页也得收走 */
       document.querySelectorAll('[data-wt-cal],[data-wt-cal-pop]').forEach((n) => n.remove());
       document.querySelectorAll('.wt-cal-island').forEach((n) => n.classList.remove('wt-cal-island'));
@@ -6706,11 +6624,12 @@ const anchorCheck = (allowWarn) => {
 };
 /* 课表切到「下一个上学日」时，面板头挂一个日期 chip，点它切回今天（PLAN-beta7 §4.1） */
 document.addEventListener('wt:day-swapped', (e) => {
-  /* 换成「下一个上学日 / 今天」就不再是手动挑的那一天了，把那份状态丢掉，
-     否则下一轮 renderWeekChip 会把胶囊又拨回手动挑的 Day */
-  WT_SHOWN_DAY = 0;
-  PICK_RUN += 1;
-  clearPickedDay();
+  /* 标题上的 Day N 和周次胶囊都得跟着表上排的那天走：以前只换了格子里的字，
+     左上角还写着 Day 1，点了 Next day 就跟下面的表对不上。
+     detail.at 为 0（切回今天）时把 TARGET_DAY 清掉。 */
+  const at = e && e.detail && e.detail.at;
+  TARGET_DAY = at ? new Date(at) : null;
+  try { refreshHeadLabel(TARGET_DAY); } catch (err) { /* ignore */ }
   renderWeekChip();
   const head = document.querySelector('[data-wesley-home] .wt-summary-head');
   if (!head) return;

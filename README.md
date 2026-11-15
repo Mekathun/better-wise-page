@@ -23,8 +23,8 @@ Not affiliated with Wesley College or with Schoolbox.
 
 Chrome or Edge. Either:
 
-1. Open `Better_WiSE_v0.1.3.5.crx`. In Edge, turn on developer mode at `edge://extensions` first.
-2. Or unpack `Better_WiSE_v0.1.3.5.zip` and use "Load unpacked" on `edge://extensions`.
+1. Open `Better_WiSE_v0.1.3.6.crx`. In Edge, turn on developer mode at `edge://extensions` first.
+2. Or unpack `Better_WiSE_v0.1.3.6.zip` and use "Load unpacked" on `edge://extensions`.
 
 Then open `https://wise.wesleycollege.net/` and sign in as usual.
 
@@ -66,8 +66,8 @@ Chrome Web Store：https://chromewebstore.google.com/detail/better-wise-page/jbp
 
 或者手动装，Chrome 或 Edge，两种方式：
 
-1. 双击 `Better_WiSE_v0.1.3.5.crx`。Edge 要先在 `edge://extensions` 打开开发者模式。
-2. 或者解压 `Better_WiSE_v0.1.3.5.zip`，在 `edge://extensions` 里选「加载解压缩的扩展」。
+1. 双击 `Better_WiSE_v0.1.3.6.crx`。Edge 要先在 `edge://extensions` 打开开发者模式。
+2. 或者解压 `Better_WiSE_v0.1.3.6.zip`，在 `edge://extensions` 里选「加载解压缩的扩展」。
 
 装完打开 `https://wise.wesleycollege.net/`，照常用学校账号登录。
 

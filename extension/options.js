@@ -159,7 +159,7 @@ function flashVersion(label) {
   }, 1000);
 }
 
-const MANIFEST = chrome.runtime.getManifest ? chrome.runtime.getManifest() : { version: '0.1.3.5' };
+const MANIFEST = chrome.runtime.getManifest ? chrome.runtime.getManifest() : { version: '0.1.3.6' };
 // 0.1.1.1 = beta1：manifest 只允许数字版本号，展示时还原成 0.1.1-beta1
 const VERSION_LABEL = (() => {
   const raw = String(MANIFEST.version || '');

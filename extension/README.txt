@@ -70,7 +70,7 @@ KEYBOARD
 
 INSTALL
 
-1. Unzip Better_WiSE_v0.1.3.5.zip
+1. Unzip Better_WiSE_v0.1.3.6.zip
 2. Open edge://extensions (or chrome://extensions) and turn on Developer mode
 3. Click "Load unpacked" and pick the unzipped folder
 4. Pin the icon if you want the toolbar popup on hand
@@ -85,6 +85,10 @@ wise.wesleycollege.net.
 
 NOTES
 
+- 0.1.3.6: the day picker is gone; the "Day N" heading now sits above the
+  summary panel instead of below it. Next day slides the new timetable in
+  again, and the heading and week chip follow the day you moved to. Switching
+  back from dark to light no longer leaves the panel interior black.
 - 0.1.3.5: the week chip and the day picker are two separate pills on the same
   line, and picking a day keeps the day, the title and the timetable together
   (the title used to say one day while the table showed another).
