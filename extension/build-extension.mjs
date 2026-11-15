@@ -76,6 +76,29 @@ try {
   console.log('PACKAGED:', outCrx);
   console.log('PACKAGED:', outZip);
   fs.rmSync(crxPath, { force: true }); // 中间文件，根目录已有带版本号的那份
+
+  // 6b. 商店专用包：manifest 里不能带 key，否则上传会报
+  //     「清单中“key”字段的值与当前内容不符」（本地 key 与商店公钥不是同一把）。
+  const storeZip = path.join(root, `Better_WiSE_v${label}-store.zip`);
+  const { execFileSync } = await import('node:child_process');
+  execFileSync('python', ['-c', `
+import zipfile, json, os, shutil, tempfile
+src, dst = r'${outZip}', r'${storeZip}'
+tmp = tempfile.mkdtemp()
+with zipfile.ZipFile(src) as z:
+    z.extractall(tmp)
+mp = os.path.join(tmp, 'manifest.json')
+m = json.load(open(mp, encoding='utf-8'))
+m.pop('key', None)
+open(mp, 'w', encoding='utf-8').write(json.dumps(m, ensure_ascii=False, indent=2))
+with zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED) as z:
+    for root_, _, files in os.walk(tmp):
+        for f in files:
+            p = os.path.join(root_, f)
+            z.write(p, os.path.relpath(p, tmp).replace(os.sep, '/'))
+shutil.rmtree(tmp, ignore_errors=True)
+`], { stdio: 'inherit' });
+  console.log('PACKAGED:', storeZip, '(no manifest.key, for Chrome Web Store)');
 } catch (e) {
   console.log('copy-to-root skipped:', e.message);
 }
