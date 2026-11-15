@@ -1,5 +1,7 @@
 # Better WiSE page
 
+**Install from the Chrome Web Store:** https://chromewebstore.google.com/detail/jbpdhgenkilngppdabeabebhfpbcgeli
+
 An unofficial browser extension for the Wesley College WiSE portal. It puts the timetable, the work that is due and a search box on the portal's home page, so a student stops opening every class page to find out what happened.
 
 Not affiliated with Wesley College or with Schoolbox.
@@ -60,7 +62,9 @@ It does not change grades, submissions or messages, and it never writes back to 
 
 ### 安装
 
-Chrome 或 Edge，两种方式：
+Chrome Web Store：https://chromewebstore.google.com/detail/jbpdhgenkilngppdabeabebhfpbcgeli
+
+或者手动装，Chrome 或 Edge，两种方式：
 
 1. 双击 `Better_WiSE_v0.1.3.crx`。Edge 要先在 `edge://extensions` 打开开发者模式。
 2. 或者解压 `Better_WiSE_v0.1.3.zip`，在 `edge://extensions` 里选「加载解压缩的扩展」。
