@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Better WiSE page</title>
+  <style>
+    :root { --accent: #64346f; --accent-2: #693e7d; --soft: #f5eff8; }
+    * { box-sizing: border-box; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #c9b3d2, #9d7ba9); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7a5a8a; }
+    /* popup 模式下如果让 html 自己溢出，浏览器会在弹窗右边缘画一条它自己的滚动条 —— 深色系统主题下就是一条黑块，
+       而且不受本页 CSS 控制。改成 body 当滚动容器、html 定死高度，页面就不会溢出到浏览器那一层了。 */
+    /* 这一页既是 options 页也是工具栏 popup。popup 的高度是浏览器按文档内容算的，
+       所以 html/body 千万别锁 height（锁了 popup 会塌成一条、看起来像坏了）。
+       color-scheme:light 让 popup 原生滚动条也用浅色，系统深色主题下不再是那条黑边。 */
+    html { background: #f5eff8; color-scheme: light; scrollbar-width: thin; scrollbar-color: rgba(100,52,111,.35) transparent; }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 9px; height: 9px; }
+    html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb { background: rgba(100,52,111,.35); border-radius: 9px; }
+    html::-webkit-scrollbar-track, body::-webkit-scrollbar-track { background: transparent; }
+    body { width: 300px; max-width: 300px; overflow-x: hidden; overflow-y: auto; margin: 0; border-radius: 12px; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif; background: radial-gradient(140% 90% at 0% 0%, #fdf9fe 0%, rgba(255,255,255,0) 55%), linear-gradient(170deg, #f8f2fb 0%, #f2e8f7 55%, #ebdff2 100%); color: #2a2430; }
+    main { padding: 22px 20px 6px; display: flex; flex-direction: column; gap: 12px; flex: 1 0 auto; }
+    h1 { font-size: 15px; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,.07); display: flex; align-items: baseline; justify-content: space-between; color: #64346f; }
+    h1 .ver { font-size: 10px; color: #8a7391; font-weight: 300; }
+    section { max-width: 100%; animation: rise .26s cubic-bezier(0.23,1,0.32,1) both; background: transparent; border: 0; border-radius: 0; padding: 0 0 10px; display: flex; flex-direction: column; gap: 13px; box-shadow: none; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; color: #555; flex-wrap: wrap; min-width: 0; margin: 1px 0; }
+    .speednum { width: 52px; text-align: center; padding: 3px 4px; border-radius: 7px; border: 1px solid rgba(100,52,111,.2); font: inherit; font-size: 11px; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    select, input[type="text"], input[type="password"] { font: inherit; font-size: 11.5px; padding: 4px 6px; border-radius: 7px; border: 1px solid rgba(100,52,111,.2); background: #fff; color: #333; max-width: 150px; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); -webkit-appearance: none; appearance: none; background: transparent; height: 22px; }
+    input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: #ddd2e5; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; margin-top: -5.5px; border-radius: 50%; border: 2px solid #64346f; background: #fff; box-sizing: border-box; transition: background .15s ease, box-shadow .15s ease; }
+    input[type="range"]:hover::-webkit-slider-thumb, input[type="range"]:active::-webkit-slider-thumb { background: #64346f; box-shadow: 0 0 0 4px rgba(100,52,111,.12); }
+    input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: #ddd2e5; }
+    input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; border: 2px solid #64346f; background: #fff; }
+    .row.slider { display: flex; flex-wrap: wrap; align-items: center; row-gap: 4px; }
+    .row.slider > span { order: 1; }
+    .row.slider input[type="range"] { flex: 0 0 100%; order: 3; width: 100%; margin: 0; height: 16px; }
+    .ticks { display: flex; width: 100%; margin: -3px 0 0; padding: 0 1px; font-size: 9.5px; color: #7c6a86; }
+    .ticks span { flex: 1 1 0; min-width: 0; }
+    .ticks span:nth-child(1) { text-align: left; }
+    .ticks span:nth-child(2) { text-align: center; }
+    .ticks span:nth-child(3) { text-align: right; }
+    .row.slider .speednum, .row.slider .val { order: 2; margin-left: auto; width: 52px !important; max-width: 52px; flex: 0 0 52px; text-align: center; padding: 3px 4px; }
+    .row.slider .suffix { order: 2; font-size: 10.5px; color: #8a7391; margin-left: 2px; }
+    input[type="color"] { width: 34px; height: 24px; padding: 0; border: 1px solid rgba(100,52,111,.2); border-radius: 6px; background: none; }
+    .mail { overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
+    .switch { width: 40px; height: 22px; flex: 0 0 40px; border-radius: 999px; border: 0; background: #cfc4d7; position: relative; display: inline-flex; align-items: center; box-sizing: border-box; cursor: pointer; transition: background .18s ease; padding: 0; }
+    .switch .knob { position: absolute; top: 50%; left: 3px; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.22); transition: transform .2s cubic-bezier(.4,0,.2,1); }
+    .switch.on { background: #64346f; }
+    .switch.on .knob { transform: translateX(18px); }
+    /* ===== 总开关：摇杆碗（原生 224x121，按 111.6% 缩放后约等于设计稿 250x135） ===== */
+    .msw { --w:224px; --h:121px; --ball:93px; --pad:6px; --slotpad:3px;
+      --travel:calc(var(--w) - var(--ball) - var(--pad)*2); --lvl:0;
+      position:relative; width:var(--w); height:var(--h); padding:0; border:0; background:none; cursor:pointer;
+      display:block; margin:6px auto; isolation:isolate; -webkit-tap-highlight-color:transparent; }
+    .msw .track { position:absolute; inset:0; border-radius:calc(var(--h)/2); overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.24) 58%, rgba(255,255,255,.4));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(255,255,255,.5),
+        inset 0 2px 6px rgba(110,84,130,.12), 0 2px 5px rgba(90,60,110,.12), 0 10px 22px rgba(90,60,110,.1); }
+    .msw .bg-lion { position:absolute; right:20px; top:50%; width:110px; height:83px; margin-top:-41.5px; pointer-events:none; opacity:.9; }
+    .msw .bg-lion i { position:absolute; inset:0; translate:0 2px;
+      background:linear-gradient(180deg, rgba(84,52,104,.62) 0%, rgba(84,52,104,.26) 58%, rgba(84,52,104,0) 100%);
+      -webkit-mask-image:url(icons/lion-mask.png), url(icons/lion-mask.png);
+      -webkit-mask-size:100% 100%, 95% 95%; -webkit-mask-position:center, center;
+      -webkit-mask-repeat:no-repeat, no-repeat; -webkit-mask-composite:xor;
+      mask-image:url(icons/lion-mask.png), url(icons/lion-mask.png);
+      mask-size:100% 100%, 95% 95%; mask-position:center, center; mask-repeat:no-repeat, no-repeat; mask-composite:exclude; }
+    .msw .fill { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      border-radius:inherit; overflow:hidden; transform:translateX(-101%);
+      transition:transform .48s cubic-bezier(.23,1,.32,1);
+      background:linear-gradient(180deg, #6b3a75, #5a2d65 58%, #64346f);
+      box-shadow: inset 0 8px 18px rgba(0,0,0,.5), inset 0 -3px 7px rgba(0,0,0,.3), inset 0 0 0 1px rgba(255,255,255,.1); }
+    .msw.on .fill { transform:translateX(0); }
+    .msw .shinewrap { position:absolute; inset:0; overflow:hidden; border-radius:inherit; pointer-events:none; z-index:2; }
+    .msw .shinewrap i { position:absolute; top:-80px; left:-72px; width:48px; height:320px; opacity:0;
+      background:linear-gradient(90deg, rgba(255,246,214,0), rgba(255,246,214,.6), rgba(255,246,214,0));
+      -webkit-mask:linear-gradient(180deg, transparent, #000 26%, #000 74%, transparent);
+      mask:linear-gradient(180deg, transparent, #000 26%, #000 74%, transparent);
+      transform:rotate(30deg); }
+    .msw.on .shinewrap i { animation:mswShine 1.5s cubic-bezier(.33,0,.2,1) .45s 1 both; }
+    @keyframes mswShine { 0% { opacity:0; transform:rotate(30deg) translateX(0); } 10% { opacity:1; } 88% { opacity:1; } 100% { opacity:0; transform:rotate(30deg) translateX(300px); } }
+    .msw .lock { position:relative; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+      width:118px; margin-right:86px; color:#f7f0e6; }
+    .msw .lk-lion { width:57px; height:36px; }
+    .msw .lk-wm { font-size:23px; font-weight:300; letter-spacing:.02em; line-height:1; }
+    .msw .lk-wm .li { color:#d9b75a; }
+    .msw .slot { position:absolute; left:calc(var(--pad) - var(--slotpad)); top:calc((var(--h) - var(--ball))/2 - var(--slotpad));
+      width:calc(var(--ball) + var(--slotpad)*2); height:calc(var(--ball) + var(--slotpad)*2); border-radius:50%;
+      overflow:hidden; transform:translateX(0); transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+      background:linear-gradient(180deg, #c8b6db 0%, #dccfea 52%, #efe8f8 100%);
+      box-shadow: inset 0 4px 8px -3px rgba(58,36,80,.42), inset 0 1px 0 rgba(255,255,255,.8), inset 0 -1px 1px rgba(255,255,255,.55),
+        0 1px 0 rgba(255,255,255,1), 0 2px 5px rgba(60,38,82,.16), 0 0 0 1px rgba(70,46,92,.07); }
+    .msw.on .slot { transform:translateX(var(--travel)); }
+    .msw .btn { position:absolute; left:var(--slotpad); top:var(--slotpad); width:var(--ball); height:var(--ball); border-radius:50%;
+      overflow:hidden; translate:0 0; transition:translate .24s cubic-bezier(.23,1,.32,1);
+      background:linear-gradient(180deg, #d5c5e5 0%, #eae0f3 46%, #fffdfe 100%);
+      box-shadow: 0 3px 4px rgba(72,66,80,.22), 0 1px 1px rgba(72,66,80,.14),
+        inset 0 -2px 3px rgba(255,255,255,.92), inset 0 3px 4px rgba(74,68,82,.13); }
+    .msw .slot:hover .btn { translate:0 2px; }
+    .msw .slot:active .btn { translate:0 8px; }
+    .msw .slot:active { background:linear-gradient(180deg, #b09ac8 0%, #cbbcdd 48%, #e6ddf2 100%);
+      box-shadow: inset 0 6px 12px -4px rgba(46,26,68,.55), inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -1px 1px rgba(255,255,255,.5),
+        0 1px 0 rgba(255,255,255,1), 0 3px 7px rgba(50,30,72,.2), 0 0 0 1px rgba(70,46,92,.1); }
+    .msw .btn::before { content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none; z-index:4;
+      box-shadow: inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(74,68,82,.14); }
+    .msw .btn::after { content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none; z-index:3;
+      background:linear-gradient(180deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.24) 44%, rgba(74,68,82,.1) 76%, rgba(74,68,82,.22) 100%);
+      -webkit-mask:radial-gradient(circle at 50% 50%, transparent 0 37.2px, #000 37.2px);
+      mask:radial-gradient(circle at 50% 50%, transparent 0 37.2px, #000 37.2px); }
+    .msw .groove { position:absolute; left:50%; top:50%; width:50px; height:37.5px; margin:-18.75px 0 0 -25px; z-index:2; overflow:hidden;
+      -webkit-mask:url(icons/lion-mask.png) center/contain no-repeat; mask:url(icons/lion-mask.png) center/contain no-repeat; }
+    .msw .groove i { position:absolute; inset:0; --ring-in:86%;
+      -webkit-mask-image:url(icons/lion-mask.png), url(icons/lion-mask.png);
+      -webkit-mask-size:100% 100%, var(--ring-in) var(--ring-in); -webkit-mask-position:center, center;
+      -webkit-mask-repeat:no-repeat, no-repeat; -webkit-mask-composite:xor;
+      mask-image:url(icons/lion-mask.png), url(icons/lion-mask.png);
+      mask-size:100% 100%, var(--ring-in) var(--ring-in); mask-position:center, center; mask-repeat:no-repeat, no-repeat; mask-composite:exclude; }
+    .msw .groove .o-d { --ring-in:93%; background:rgba(68,42,92,.62); }
+    .msw .groove .c-d { background:linear-gradient(180deg, rgba(86,56,108,.62), rgba(86,56,108,0) 70%); translate:0 1px; }
+    .msw .groove .c-l { background:linear-gradient(0deg, rgba(255,255,255,.98), rgba(255,255,255,0) 70%); translate:0 -1px; }
+    .msw .groove .o-l { --ring-in:93%; background:rgba(255,255,255,.62); translate:0 1px; }
+    .msw .water { position:absolute; left:-40%; right:-40%; bottom:0; height:calc(var(--lvl) * 100%); background:#64346f; }
+    .msw .water .wave { position:absolute; left:0; right:0; bottom:100%; width:100%; height:13px; display:block; fill:#64346f;
+      opacity:clamp(0, calc(var(--lvl) * 7), 1); animation:mswWave var(--wave-t, 2.2s) linear infinite; }
+    .msw .water .wave.w2 { height:16px; fill:#7a4a86; animation-duration:3.4s; animation-direction:reverse; opacity:clamp(0, calc(var(--lvl) * 4), .5); }
+    .msw .water .body { position:absolute; inset:0; background:#64346f; }
+    @keyframes mswWave { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) {
+      .msw .btn, .msw .slot, .msw .fill { transition-duration:.15s !important; }
+      .msw .water .wave, .msw.on .shinewrap i { animation:none !important; }
+    }
+    .row.master { position: relative; padding: 8px 14px 12px; isolation: isolate; }
+    .row.master::before { content: ""; position: absolute; inset: 0 6px; border-radius: 76px; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(52% 130% at 16% -10%, rgba(196,166,224,.62), rgba(196,166,224,0) 70%),
+        radial-gradient(56% 130% at 88% 110%, rgba(214,183,120,.55), rgba(214,183,120,0) 72%),
+        radial-gradient(44% 100% at 58% -30%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%),
+        radial-gradient(40% 90% at 40% 120%, rgba(122,74,134,.18), rgba(122,74,134,0) 70%);
+      filter: blur(7px); }
+    .row.master .msw { position: relative; z-index: 1; margin: 0 auto; }
+    [hidden] { display: none !important; }
+    .keywrap { position: relative; display: flex; align-items: center; flex: 1; }
+    .keywrap input { flex: 1; padding-right: 26px; }
+    .keywrap .keyeye { position: absolute; right: 6px; border: 0; background: none; color: #c3b3cc; cursor: pointer; padding: 0; display: inline-flex; }
+    .hint { font-size: 10px; color: #7c6a86; margin: -2px 0 0; }
+    .tsize summary { cursor: pointer; font-size: 10.5px; color: #64346f; list-style: none; padding: 2px 0; font-weight: 400 !important; }
+    .tsize summary::-webkit-details-marker { display: none; }
+    
+    .tsize-body { padding-right: 10px; box-sizing: border-box; }
+    details.tsize[open] .tsize-body { max-height: 320px; opacity: 1; }
+    details.tsize[open] .tsize-body { animation: wtGrow .25s ease both; }
+    .wt-keycap { min-width: 84px; padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(100,52,111,.22);
+      background: rgba(255,255,255,.7); font: inherit; font-size: 11.5px; font-weight: 700; color: #64346f; cursor: pointer; }
+    .wt-keycap.rec { border-color: #64346f; box-shadow: 0 0 0 3px rgba(100,52,111,.14); }
+    .wt-keycap.empty { color: #9b96a4; font-weight: 500; }
+    .wt-keyclear { border: 0; background: none; color: #9b96a4; font-size: 13px; cursor: pointer; padding: 0 4px; }
+    .wt-keyclear:hover { color: #64346f; }
+    html[data-wt-theme="dark"] .wt-keycap { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16); color: #d9d5e0; }
+    html[data-wt-theme="dark"] .wt-keycap.empty { color: #6f6a78; }
+    html[data-wt-theme="dark"] .wt-keyclear { color: #6f6a78; }
+    html[data-wt-theme="dark"] .wt-keyclear:hover { color: #e7e5ea; }
+    .subhead { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #8b8794; margin: 14px 0 6px; font-weight: 700; }
+    html[data-wt-theme="dark"] .subhead { color: #9b96a4; }
+    .diaglog { max-height: 118px; overflow: auto; margin: 4px 0 6px; padding: 8px 10px; border-radius: 8px;
+      background: rgba(100,52,111,.06); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; word-break: break-word; color: #4a2b55; }
+    html[data-wt-theme="dark"] .diaglog { background: rgba(255,255,255,.05); color: #cfc9d6; }
+    .val-out { font-size: 11.5px; font-weight: 700; color: #64346f; }
+    html[data-wt-theme="dark"] .val-out { color: #cfc4d8; }
+    #sheet details.sect { border-top: 1px solid rgba(0,0,0,.07); margin-top: 8px; padding-top: 8px; }
+    #sheet details.sect summary { cursor: pointer; font-size: 12px; font-weight: 700; color: #64346f; list-style: none; padding: 2px 0 6px; }
+    #sheet details.sect summary::-webkit-details-marker { display: none; }
+    .wt-chev{display:inline-flex;align-items:center;justify-content:center;color:#64346f;margin-left:5px;transition:transform .22s cubic-bezier(.4,0,.2,1);vertical-align:-2px;}
+    .wt-chev svg{width:13px;height:13px;}
+    details[open] > summary .wt-chev{transform:rotate(90deg);}
+    #sheet details.sect[open] > *:not(summary) { animation: wtGrow .25s ease both; }
+    @keyframes wtGrow { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .tsize-toggle { align-self: flex-start; border: 0; background: none; color: #64346f; font: inherit; font-size: 10.5px; cursor: pointer; padding: 0; }
+    .tsize-toggle::after { content: " ▾"; }
+    .tsize-body { margin-left: 12px; padding-left: 10px; border-left: 2px solid #e7dcee; display: flex; flex-direction: column; gap: 6px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .3s cubic-bezier(.4,0,.2,1), opacity .25s ease; }
+    .tsize-body.open { max-height: 320px; opacity: 1; }
+    .reset { align-self: flex-start; border: 1px solid rgba(100,52,111,.25); background: none; color: var(--accent); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 10.5px; cursor: pointer; }
+    .reset:hover { background: var(--accent-2); color: #fff; }
+    button:disabled, .apply:disabled, .reset:disabled { opacity: .42; cursor: not-allowed; pointer-events: none; filter: grayscale(.35); }
+    body { overflow-y: auto !important; }
+    body { padding-bottom: 6px; }
+    footer { position: sticky; bottom: 0; z-index: 2; background: linear-gradient(180deg,rgba(242,232,247,0) 0%,rgba(242,232,247,.86) 26%,rgba(242,232,247,.97) 52%,rgba(242,232,247,.97) 100%); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding: 22px 10px 12px; font-size: 11px; color: #8a7391; }
+    footer .gear { border: 0; background: none; cursor: pointer; color: #64346f; padding: 0; display: inline-flex; align-items: center; gap: 5px; font: inherit; font-size: 11px; border-radius: 6px; }
+    footer .gear svg { width: 13px; height: 13px; }
+    footer .gear:hover { color: var(--accent-2); }
+    footer .center { position: absolute; left: 0; right: 0; text-align: center; pointer-events: none; }
+    footer .right { text-align: right; margin-left: auto; }
+    .sheet { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; background: rgba(20,10,25,0); pointer-events: none; transition: background .2s ease; }
+    .sheet.open { background: rgba(20,10,25,.28); pointer-events: auto; }
+    .sheet-card { width: 100%; max-height: 82vh; overflow: auto; background: #fff; border-radius: 16px 16px 0 0; padding: 14px; transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.3,1); display: flex; flex-direction: column; gap: 8px; }
+    .sheet.open .sheet-card { transform: none; }
+    .grabber { width: 46px; height: 14px; margin: -4px auto 10px; position: relative; }
+    .grabber::before, .grabber::after { content: ""; position: absolute; left: 0; right: 0; height: 3px; border-radius: 3px; background: rgba(0,0,0,.30); }
+    .grabber::before { top: 2px; }
+    .grabber::after { top: 7px; }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; }
+    .sheet-head.group { border-top: 1px solid rgba(0,0,0,.07); margin-top: 10px; padding-top: 10px; }
+    .sheet-x { border: 0; background: none; cursor: pointer; color: #8a7391; font-size: 16px; padding: 0 4px; }
+    .apply { border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.62); backdrop-filter: blur(14px) saturate(1.15); -webkit-backdrop-filter: blur(14px) saturate(1.15); color: #64346f; font: inherit; font-size: 10.5px; font-weight: 700; padding: 5px 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(100,52,111,.12); transition: background .16s ease, transform .12s ease, box-shadow .16s ease; }
+    .apply:hover { background: rgba(255,255,255,.85); box-shadow: 0 6px 18px rgba(100,52,111,.16); }
+    .apply:active { transform: scale(.96); }
+    main section, #sheet .sheet-card > * { transition: opacity .5s ease, filter .5s ease; }
+    body.disabled main section:not(:first-of-type) { opacity: .35 !important; filter: grayscale(.55); pointer-events: none; }
+    body.disabled #sheet .sheet-card > *:not(.sheet-head) { opacity: .35 !important; filter: grayscale(.55); pointer-events: none; }
+    .sheet .row { font-size: 11px; }
+
+    .sheet-head.group { gap: 2px; }
+
+    .mail { color: var(--accent); text-decoration: none; }
+    .mail:hover { text-decoration: underline; }
+    footer .feedback { border: 0; background: rgba(0,0,0,.035); color: #8b8790; border-radius: 999px; padding: 3px 9px; font: inherit; font-size: 10.5px; cursor: pointer; position: relative; }
+    footer .feedback:hover { background: rgba(0,0,0,.07); color: #2a2a2e; }
+    footer .feedback::after { content: attr(data-tip); position: absolute; right: 0; bottom: calc(100% + 6px); background: #2a2a2e; color: #fff; font-size: 10px; padding: 3px 7px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transform: translateY(2px); transition: opacity .15s ease, transform .15s ease; }
+    footer .feedback:hover::after { opacity: 1; transform: none; }
+    .sheet input { max-width: none; flex: 1; }
+    #status { font-size: 10px; color: #8a7391; min-height: 0; }
+    footer .center { font-weight: 300; }
+    footer .center.flash { animation: footFlash .28s cubic-bezier(0.23,1,0.32,1) both; color: #693e7d; font-weight: 300; }
+    @keyframes footFlash { from { opacity: 0; transform: translateY(4px) scale(.96); } to { opacity: 1; transform: none; } }
+
+    /* ===== v0.0.101 motion pass: section stagger, press feedback, reduced motion ===== */
+    main > section:nth-of-type(2) { animation-delay: .04s; }
+    main > section:nth-of-type(3) { animation-delay: .08s; }
+    main > section:nth-of-type(4) { animation-delay: .12s; }
+    .switch:active .knob { transform: scale(.9); }
+    /* "Smoother animations" 是 More animations 的子项：缩进 + 关掉父项时置灰 */
+    .row.sub { padding-left: 18px; position: relative; }
+    .row.sub::before { content: ""; position: absolute; left: 7px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: currentColor; opacity: .28; }
+    .row.sub.disabled { opacity: .42; }
+    .row.sub.disabled .switch { pointer-events: none; }
+    .switch.on:active .knob { transform: translateX(18px) scale(.9); }
+    input[type="range"]::-webkit-slider-thumb { transition: background .15s ease, box-shadow .15s ease, transform .12s ease; }
+    input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.12); }
+    .reset, footer .gear, footer .feedback, .sheet-x, .keyeye { transition: transform .12s ease, background .15s ease, color .15s ease; }
+    .reset:active, footer .gear:active, footer .feedback:active, .sheet-x:active, .keyeye:active { transform: scale(.94); }
+    @media (prefers-reduced-motion: reduce) {
+      main section { animation: riseFade .2s ease both !important; animation-delay: 0s !important; }
+      .sheet-card { transform: none; }
+      .tsize-body { transition: max-height .2s, opacity .2s; }
+      #sheet details.sect[open] > * { animation: riseFade .2s ease both; }
+      .switch:active .knob, .reset:active, footer .gear:active, footer .feedback:active, .sheet-x:active, .keyeye:active, input[type="range"]:active::-webkit-slider-thumb { transform: none; }
+      .switch.on:active .knob { transform: translateX(18px); }
+    }
+    @keyframes riseFade { from { opacity: 0; } to { opacity: 1; } }
+    /* Theme 分段控件（首页） */
+    .theme-row{align-items:center}
+    .seg{display:inline-flex;padding:3px;gap:2px;border-radius:10px;background:rgba(100,52,111,.07);box-shadow:inset 0 1px 2px rgba(74,36,82,.08)}
+    .seg button{appearance:none;border:0;background:transparent;color:#6d5d78;font:inherit;font-size:11.5px;line-height:1;padding:6px 10px;border-radius:8px;cursor:pointer;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+    .seg button:hover{color:#4a2452}
+    .seg button[aria-checked="true"]{background:#fff;color:#4a2452;font-weight:600;box-shadow:0 1px 2px rgba(74,36,82,.14)}
+    .seg button:focus-visible{outline:2px solid #64346f;outline-offset:2px}
+    /* 深色下未选中的分段按钮被画成白块：静态 HTML 里 System 默认 aria-checked="true"，
+       JS 切换主题后属性改了、过渡却被冻结在白色上。这里把底色调死，别再漏白。 */
+    .seg button { background: transparent !important; }
+    .seg button[aria-checked="true"] { background: #fff !important; }
+    html[data-wt-theme="dark"] .seg button { background: transparent !important; }
+    html[data-wt-theme="dark"] .seg button[aria-checked="true"] { background: #3a3742 !important; }
+
+
+    /* ===== dark (follows the Theme setting) ===== */
+    html[data-wt-theme="dark"] { background: #151517; }
+    html[data-wt-theme="dark"] body { background: linear-gradient(170deg,#1b1b1e 0%,#171719 60%,#141416 100%); color: #e7e5ea; }
+    html[data-wt-theme="dark"] h1 { color: #e7e5ea; border-bottom-color: rgba(255,255,255,.09); }
+    html[data-wt-theme="dark"] h1 .ver { color: #827e89; }
+    html[data-wt-theme="dark"] .row { color: #b9b4c0; }
+    html[data-wt-theme="dark"] .hint, html[data-wt-theme="dark"] .ticks, html[data-wt-theme="dark"] .ticks span, html[data-wt-theme="dark"] .row.slider .suffix { color: #827e89; }
+    html[data-wt-theme="dark"] select, html[data-wt-theme="dark"] input[type="text"], html[data-wt-theme="dark"] input[type="password"], html[data-wt-theme="dark"] input[type="number"], html[data-wt-theme="dark"] .speednum, html[data-wt-theme="dark"] .val { background: #232326; color: #e7e5ea; border-color: rgba(255,255,255,.14); }
+    html[data-wt-theme="dark"] input[type="range"]::-webkit-slider-runnable-track { background: #34343a; }
+    html[data-wt-theme="dark"] input[type="range"]::-webkit-slider-thumb { border-color: #d9d5e0; background: #1b1b1e; }
+    html[data-wt-theme="dark"] input[type="range"]:hover::-webkit-slider-thumb, html[data-wt-theme="dark"] input[type="range"]:active::-webkit-slider-thumb { background: #d9d5e0; box-shadow: 0 0 0 4px rgba(255,255,255,.18); }
+    html[data-wt-theme="dark"] button.reset, html[data-wt-theme="dark"] .install, html[data-wt-theme="dark"] #applyNow { background: #26262a; color: #e7e5ea; border-color: rgba(255,255,255,.12); }
+    /* 暗色下的开关：不再用紫色，开态=浅灰轨道 + 白钮 */
+    html[data-wt-theme="dark"] .switch { background: #3a3a42; }
+    html[data-wt-theme="dark"] .switch .knob { background: #b9b5c2; box-shadow: 0 1px 2px rgba(0,0,0,.5); }
+    html[data-wt-theme="dark"] .switch.on { background: #8b8b96; }
+    html[data-wt-theme="dark"] .switch.on .knob { background: #fff; }
+    html[data-wt-theme="dark"] .seg button[aria-checked="true"] { background: #34343a; color: #fff; }
+
+    html[data-wt-theme="dark"] button.reset:hover, html[data-wt-theme="dark"] #applyNow:hover { background: #2f2f35; }
+    html[data-wt-theme="dark"] .sheet-body, html[data-wt-theme="dark"] .sheet .inner { background: #1b1b1e; color: #e7e5ea; }
+    html[data-wt-theme="dark"] .sheet-head, html[data-wt-theme="dark"] .sheet-head.group { color: #827e89; border-color: rgba(255,255,255,.08); }
+    /* 底部抽屉（Detailed settings / Feedback）：之前只写了亮色底，暗色下整片纯白 */
+    html[data-wt-theme="dark"] .sheet-card { background: #1b1b1e; color: #e7e5ea; box-shadow: 0 -10px 32px rgba(0,0,0,.55); }
+    html[data-wt-theme="dark"] .grabber::before, html[data-wt-theme="dark"] .grabber::after { background: rgba(255,255,255,.26); }
+    html[data-wt-theme="dark"] .sheet-x { color: #9b96a4; }
+    html[data-wt-theme="dark"] .sheet-x:hover { color: #e7e5ea; }
+    html[data-wt-theme="dark"] .sheet .row, html[data-wt-theme="dark"] .sheet-card .row { color: #b9b4c0; border-color: rgba(255,255,255,.07); }
+    /* 抽屉里的小节标题原来是 Wesley 紫，暗色下几乎看不见 */
+    html[data-wt-theme="dark"] #sheet details.sect { border-top-color: rgba(255,255,255,.08); }
+    html[data-wt-theme="dark"] #sheet details.sect summary, html[data-wt-theme="dark"] .tsize summary { color: #cfc4d8; }
+    html[data-wt-theme="dark"] .circle-help { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #cfc9d8; }
+    html[data-wt-theme="dark"] .circle-help:hover { background: #e7e5ea; color: #1b1b1e; }
+    html[data-wt-theme="dark"] .apply { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.16); color: #e7e5ea; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+    html[data-wt-theme="dark"] .apply:hover { background: rgba(255,255,255,.16); }
+    html[data-wt-theme="dark"] .seg { background: rgba(255,255,255,.06); box-shadow: inset 0 1px 2px rgba(0,0,0,.5); }
+    html[data-wt-theme="dark"] .seg button { color: #b9b4c0; }
+    html[data-wt-theme="dark"] .seg button[aria-checked="true"] { background: #34343a; color: #f2ecf7; }
+    html[data-wt-theme="dark"] .switch { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.12); }
+    html[data-wt-theme="dark"] .switch .knob { background: #c9c5d2; }
+    html[data-wt-theme="dark"] .switch.on .knob { background: #fff; }
+    html[data-wt-theme="dark"] .switch.on { background: #7d5a92; border-color: #7d5a92; }
+    html[data-wt-theme="dark"] footer, html[data-wt-theme="dark"] .foot { background: linear-gradient(180deg,rgba(21,21,23,0) 0%,rgba(21,21,23,.88) 26%,rgba(21,21,23,.98) 52%,rgba(21,21,23,.98) 100%); color: #827e89; border-color: rgba(255,255,255,.08); }
+    html[data-wt-theme="dark"] footer a, html[data-wt-theme="dark"] .foot a { color: #b9a3c9; }
+    /* footer 左下角那个齿轮按钮是 <button> 不是 <a>，上面那条管不到它，
+       紫色 #64346f 压在暗底上只有 1.8:1，等于看不见。 */
+    html[data-wt-theme="dark"] footer .gear { color: #cfc4d8; }
+    html[data-wt-theme="dark"] footer .gear:hover { color: #fff; }
+    html[data-wt-theme="dark"] footer .center, html[data-wt-theme="dark"] footer .right { color: #9b96a4; }
+    html[data-wt-theme="dark"] .row.master::before { display: none; }
+    /* 暗色主开关：轻阴影、浮雕看得见、球上没有白环 */
+    html[data-wt-theme="dark"] .msw .track {
+      background: linear-gradient(180deg,#27272c 0%,#1d1d21 58%,#232327 100%) !important;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.075), inset 0 1px 0 rgba(255,255,255,.13),
+        inset 0 -16px 26px -20px rgba(255,255,255,.12), 0 2px 9px rgba(0,0,0,.32) !important; }
+    html[data-wt-theme="dark"] .msw .bg-lion { opacity: .95; filter: drop-shadow(0 1px 0 rgba(0,0,0,.55)); }
+    html[data-wt-theme="dark"] .msw .bg-lion i {
+      background: linear-gradient(180deg, rgba(238,224,252,.72) 0%, rgba(226,206,244,.34) 55%, rgba(214,190,235,.06) 100%) !important; }
+    html[data-wt-theme="dark"] .msw .slot {
+      background: #141416 !important;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05) !important; }
+    /* 结构和亮色完全一样，只是数值按暗色换算：
+       .slot 内阴影 = 上暗下亮，.btn 内阴影 = 上暗下亮，.btn 外阴影 = 上亮下暗 */
+    html[data-wt-theme="dark"] .msw .slot {
+      background: linear-gradient(180deg, #131315 0%, #191919 52%, #202024 100%) !important;
+      box-shadow:
+        inset 0 4px 8px -3px rgba(0,0,0,.62),
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 1px rgba(255,255,255,.09),
+        0 1px 0 rgba(255,255,255,.06),
+        0 2px 5px rgba(0,0,0,.52),
+        0 0 0 1px rgba(255,255,255,.05) !important; }
+    html[data-wt-theme="dark"] .msw .btn {
+      /* 只有一条线性渐变 + 外投影，面上不叠高光层 */
+      background: linear-gradient(180deg, #1b1b1f 0%, #29292f 62%, #3b3b44 100%) !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,.62), 0 1px 2px rgba(0,0,0,.5) !important; }
+    html[data-wt-theme="dark"] .msw .btn::before {
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.24), inset 0 -1.5px 0 rgba(0,0,0,.55) !important; }
+    html[data-wt-theme="dark"] .msw .btn::after {
+      background: linear-gradient(180deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.05) 40%,
+        rgba(0,0,0,.55) 82%, rgba(0,0,0,.75) 100%) !important; }
+    html[data-wt-theme="dark"] .msw .groove { opacity: .95; }
+    html[data-wt-theme="dark"] .msw .groove .c-d { background: linear-gradient(180deg, rgba(0,0,0,.7), rgba(0,0,0,0) 70%) !important; }
+    html[data-wt-theme="dark"] .msw .groove .c-l { background: linear-gradient(0deg, rgba(255,255,255,.5), rgba(255,255,255,0) 70%) !important; }
+    html[data-wt-theme="dark"] .msw .groove .o-d { background: rgba(0,0,0,.5) !important; }
+    html[data-wt-theme="dark"] .msw .groove .o-l { background: rgba(255,255,255,.34) !important; }
+
+    /* neutral accents: no purple text or controls */
+    h1 { color: #2f2b34 !important; }
+    #applyNow { background: #64346f !important; color: #fff !important; border-color: #64346f !important; }
+    #applyNow:hover { background: #693e7d !important; }
+    a, .foot a, #settingsLink { color: #57505f !important; }
+    .switch.on { background: #64346f !important; }
+    .seg button[aria-checked="true"] { color: #2f2b34; }
+    input[type="range"]::-webkit-slider-thumb { border-color: #64346f !important; }
+    .row .val { color: #57505f !important; }
+    html[data-wt-theme="dark"] h1 { color: #e7e5ea !important; }
+    html[data-wt-theme="dark"] #applyNow { background: #2f2a38 !important; color: #e7e5ea !important; border-color: #413a4a !important; }
+    html[data-wt-theme="dark"] #applyNow:hover { background: #3a3444 !important; }
+    html[data-wt-theme="dark"] a, html[data-wt-theme="dark"] .foot a, html[data-wt-theme="dark"] #settingsLink { color: #d9d5e0 !important; }
+    html[data-wt-theme="dark"] .switch.on { background: #8b8b96 !important; }
+    html[data-wt-theme="dark"] .seg button[aria-checked="true"] { background: #3a3742; color: #f0eef4; }
+    html[data-wt-theme="dark"] input[type="range"]::-webkit-slider-thumb { border-color: #e7e5ea !important; }
+    html[data-wt-theme="dark"] .row .val { color: #d9d5e0 !important; }
+
+    /* 宽屏（标签页里打开时）：还是原来那套竖版，只是居中摆在一张卡片里 */
+    @media (min-width: 520px) {
+      html { background: #efe7f3; }
+      body { width: 340px; max-width: 340px; margin: 24px auto; border-radius: 18px; min-height: calc(100vh - 48px);
+        box-shadow: 0 18px 50px rgba(60,30,70,.14), 0 2px 8px rgba(60,30,70,.06); }
+      main { padding: 24px 22px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Better WiSE page <button id="applyNow" class="apply">Apply now</button></h1>
+    <section>
+      <div class="row master"><button id="inject" class="msw" type="button" role="switch" aria-checked="true" aria-label="Enabled">
+        <span class="track">
+          <span class="bg-lion"><i></i></span>
+          <span class="fill">
+            <span class="shinewrap"><i></i></span>
+            <span class="lock">
+              <svg class="lk-lion" viewBox="0 0 120 74" aria-hidden="true"><rect width="120" height="74" fill="currentColor" mask="url(#wtLionMask)"/></svg>
+              <span class="lk-wm">W<span class="li">i</span>SE</span>
+            </span>
+          </span>
+        </span>
+        <span class="slot"><span class="btn">
+          <span class="groove">
+            <i class="o-d"></i><i class="c-d"></i><i class="c-l"></i><i class="o-l"></i>
+            <span class="water"><svg class="wave" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M0 15 C50 2 100 2 150 15 S250 28 300 15 S400 2 450 15 S550 28 600 15 V30 H0 Z"/></svg><svg class="wave w2" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true"><path d="M0 15 C50 4 100 4 150 15 S250 26 300 15 S400 4 450 15 S550 26 600 15 V30 H0 Z"/></svg><i class="body"></i></span>
+          </span>
+        </span></span>
+      </button></div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <mask id="wtLionMask" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="74">
+          <image href="icons/lion-mask.png" x="0" y="0" width="120" height="74" preserveAspectRatio="xMidYMid meet"/>
+        </mask>
+      </defs></svg>
+    </section>
+
+
+    <section class="theme-sec">
+      <div class="row theme-row"><span>Theme</span>
+        <div class="seg" id="themeSeg" role="radiogroup" aria-label="Theme">
+          <button type="button" role="radio" aria-checked="true" data-theme="system">System</button>
+          <button type="button" role="radio" aria-checked="false" data-theme="light">Light</button>
+          <button type="button" role="radio" aria-checked="false" data-theme="dark">Dark</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row"><span title="Extra motion: staggered card entry, hover lift, modal and next-day transitions. Basic fades always stay on.">More animations</span><button id="animations" class="switch" type="button" role="switch"><span class="knob"></span></button></div>
+      <div class="row"><span title="Limits repaint to each card and skips the heaviest compositing work. Transitions stay on.">Performance mode</span><button id="perfMode" class="switch" type="button" role="switch"><span class="knob"></span></button></div>
+      <div class="row slider"><span>Animation speed</span><input id="animSpeedVal" type="number" min="0.25" max="5" step="0.25" class="speednum" /><input id="animSpeed" type="range" min="0" max="100" step="1" /></div>
+      <div class="ticks"><span>0.25×</span><span>1×</span><span>5×</span></div>
+    </section>
+    <span id="status"></span>
+  </main>
+
+  <footer>
+    <button id="gear" class="gear" title="Settings">Settings</button>
+    <span class="center" id="footVer">0.1.2.17</span>
+    <button id="feedbackBtn" class="right feedback" data-tip="Feedback?">by Chris Guo</button>
+  </footer>
+
+  <div id="feedback" class="sheet">
+    <div class="sheet-card" role="dialog" aria-modal="true">
+      <div class="sheet-head">Feedback <button id="feedbackClose" class="sheet-x" aria-label="Close">×</button></div>
+      <p class="hint">Got an idea or found a bug? Every piece of feedback makes this extension better.</p>
+      <div class="row"><span>School</span><a class="mail" href="mailto:chris.guo@wesleycollege.edu.au">chris.guo@wesleycollege.edu.au</a></div>
+      <div class="row"><span>Personal</span><a class="mail" href="mailto:2561845384@qq.com">2561845384@qq.com</a></div>
+      <p class="hint">Your feedback helps make every release a little more perfect.</p>
+    </div>
+  </div>
+
+  <div id="sheet" class="sheet">
+    <div class="sheet-card" role="dialog" aria-modal="true">
+      <div class="sheet-head">Detailed settings <button id="sheetClose" class="sheet-x" aria-label="Close">×</button></div>
+      <div class="sheet-head group">WiSE data</div>
+      <div class="row" id="rereadRow"><span>Latest posts</span><button id="reread" class="apply">Re-read latest posts</button></div>
+      <div id="rereadStatus" class="hint"></div>
+      <div class="sheet-head group">Surfaces</div>
+      <div class="row"><span>Tab bars</span><button id="navGlass" class="switch" type="button" role="switch"><span class="knob"></span></button></div>
+      <div class="row slider" id="navGlassOpacityRow"><span>Tab bars opacity</span><input id="navGlassOpacity" type="range" min="0" max="100" step="5" /></div>
+      <div class="row"><span>Section headers</span><button id="secGlass" class="switch" type="button" role="switch"><span class="knob"></span></button></div>
+      <div class="row slider" id="secGlassOpacityRow"><span>Section opacity</span><input id="secGlassOpacity" type="range" min="0" max="100" step="5" /></div>
+      <div class="sheet-head group">Cards</div>
+      <div class="row slider"><span>Cards per row</span><input id="rowMaxVal" class="val" type="number" min="3" max="10" step="1" /><input id="rowMax" type="range" min="3" max="10" step="1" /></div>
+      <div class="row slider"><span>Card size</span><input id="cardSizePctVal" class="val" type="number" /><span class="suffix">%</span><input id="cardSizePct" type="range" min="80" max="100" step="1" /></div>
+      <div class="row slider"><span>Text size</span><input id="textScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="textScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      <details class="tsize"><summary>Advanced text sizes</summary>
+      <div class="tsize-body">
+        <div class="row slider"><span>Card link</span><input id="linkScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="linkScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+        <div class="row slider"><span>Card title</span><input id="titleScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="titleScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+        <div class="row slider"><span>Card detail</span><input id="detailScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="detailScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      </div>
+      </details>
+      <div class="row slider"><span>Card opacity</span><input id="cardOpacity" type="range" min="0" max="100" step="5" /></div>
+      <div class="row"><span>Card effect</span><select id="cardEffect"><option value="none">None</option><option value="frost">Frosted glass</option><option value="soft">Soft blur</option><option value="grain">Grain</option><option value="vignette">Vignette</option></select></div>
+      <div class="sheet-head group">Background</div>
+      <div class="row"><span>Background</span><select id="bgMode"><option value="colors">Colours</option><option value="image">Image (beta)</option></select></div>
+      <div class="row" id="bgFromRow"><input id="bgFromPick" type="color" aria-label="Background from colour" /><input id="bgFrom" type="text" aria-label="Background from colour value" spellcheck="false" placeholder="#f7f2f9 / rgb() / hsl()" /></div>
+      <div class="row" id="bgToRow"><input id="bgToPick" type="color" aria-label="Background to colour" /><input id="bgTo" type="text" aria-label="Background to colour value" spellcheck="false" placeholder="#efe4f4 / rgb() / hsl()" /></div>
+      <div class="row"><span>Glow</span><input id="bgGlowPick" type="color" /><input id="bgGlow" type="text" spellcheck="false" placeholder="#efe4f4" /></div>
+      <div class="row slider"><span>Background opacity</span><input id="bgOpacity" type="range" min="0" max="100" step="5" /></div>
+      <div class="row" id="bgImageRow" hidden><input id="bgImage" type="file" accept="image/*" aria-label="Background image" /><button id="bgClear" class="reset">Clear</button></div>
+      <div class="row slider"><span>Content opacity</span><input id="bodyOpacity" type="range" min="0" max="100" step="5" /></div>
+      <div class="row"><span>Effect</span><select id="bgEffect"><option value="none">None</option><option value="frost">Frosted glass</option><option value="soft">Soft blur</option><option value="grain">Grain</option><option value="vignette">Vignette</option></select></div>
+      <button id="resetTheme" class="reset">Reset background</button>
+      <div class="sheet-head group">Modal</div>
+      <div class="row slider"><span>Modal width</span><input id="modalWidthVal" class="val" type="number" /><span class="suffix">%</span><input id="modalWidth" data-min="25" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      <div class="row slider"><span>Modal UI size</span><input id="modalUiPctVal" class="val" type="number" /><span class="suffix">%</span><input id="modalUiPct" data-min="25" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      <details class="tsize"><summary>Modal text size</summary>
+      <div class="tsize-body open">
+        <div class="row slider"><span>Modal link</span><input id="modalLinkScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="modalLinkScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+        <div class="row slider"><span>Modal title</span><input id="modalTitleScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="modalTitleScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+        <div class="row slider"><span>Modal detail</span><input id="modalDetailScalePctVal" class="val" type="number" /><span class="suffix">%</span><input id="modalDetailScalePct" data-min="50" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      </div>
+      </details>
+      <div class="sheet-head group">Timetable</div>
+      <div class="row slider"><span>Card height</span><input id="timetableHeightVal" class="val" type="number" /><span class="suffix">%</span><input id="timetableHeight" data-min="25" data-max="200" type="range" min="0" max="100" step="1" /></div>
+      <div class="sheet-head group">Shortcuts</div>
+      <div class="row"><span>Search</span><button class="wt-keycap" data-shortcut="search" type="button"></button><button class="wt-keyclear" data-shortcut="search" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <div class="row"><span>Due section</span><button class="wt-keycap" data-shortcut="due" type="button"></button><button class="wt-keyclear" data-shortcut="due" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <div class="row"><span>To do today</span><button class="wt-keycap" data-shortcut="todo" type="button"></button><button class="wt-keyclear" data-shortcut="todo" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <div class="row"><span>Upcoming list</span><button class="wt-keycap" data-shortcut="upcoming" type="button"></button><button class="wt-keyclear" data-shortcut="upcoming" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <div class="row"><span title="Opens the panel and expands every section — press again to close them all.">All sections</span><button class="wt-keycap" data-shortcut="panel" type="button"></button><button class="wt-keyclear" data-shortcut="panel" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <div class="row"><span>Next school day</span><button class="wt-keycap" data-shortcut="nextDay" type="button"></button><button class="wt-keyclear" data-shortcut="nextDay" type="button" title="Clear" aria-label="Clear">×</button></div>
+      <p class="hint">Click a key, then press the combo you want. Same key opens and closes the thing. Ctrl/⌘+K always opens search.</p>
+      <div class="sheet-head group">Developer</div>
+      <div class="row"><span>Weekend timetable & To do</span><button id="devMode" class="switch" type="button" role="switch"><span class="knob"></span></button></div>
+      <button id="testAlert" class="reset">Test news alert</button>
+      <button id="rereadAll" class="reset">Re-read all posts (latest day)</button>
+      <button id="clearCache" class="reset">Clear all caches</button>
+      <div class="row"><span>Auto-export logs on open / on error</span><button id="autoLogs" class="switch" type="button" role="switch" aria-checked="false"><span class="knob"></span></button></div>
+      <button id="downloadLogs" class="reset">Download debug logs</button>
+      <div class="subhead">Diagnostics</div>
+      <div class="row"><span>Version</span><output id="diagVersion" class="val-out">—</output></div>
+      <div class="row"><span>Panel mount</span><output id="diagMount" class="val-out">—</output></div>
+      <div class="row"><span>Last warning</span><output id="diagWarn" class="val-out">—</output></div>
+      <pre id="diagLog" class="diaglog">—</pre>
+      <button id="diagCopy" class="reset">Copy diagnostics</button>
+      <button id="resetAll" class="reset">Restore factory settings</button>
+      <p class="hint">Changes save automatically.</p>
+    </div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

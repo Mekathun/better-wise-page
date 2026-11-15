@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Better WiSE Page — Privacy Policy</title>
+<meta name="description" content="Privacy policy for the Better WiSE Page browser extension." />
+<style>
+  :root{
+    --purple:#64346f; --purple-d:#4a2452; --gold:#b39037;
+    --ink:#1b1220; --muted:#6c5a74; --line:#e7dced; --bg:#faf7fb;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.7 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding:48px 20px 96px;
+  }
+  main{max-width:720px;margin:0 auto}
+  header{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:32px}
+  .mark{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+  .mark svg{width:26px;height:26px;flex:none}
+  .mark span{font-size:14px;letter-spacing:.02em;color:var(--muted)}
+  h1{font-size:30px;line-height:1.25;margin:0 0 10px;letter-spacing:-.01em}
+  .meta{margin:0;font-size:14px;color:var(--muted)}
+  h2{font-size:19px;margin:36px 0 10px;letter-spacing:-.005em}
+  h2:first-of-type{margin-top:0}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px;padding-left:22px}
+  li{margin-bottom:6px}
+  a{color:var(--purple);text-underline-offset:2px}
+  a:hover{color:var(--purple-d)}
+  .callout{
+    border-left:3px solid var(--gold); background:#fdf9ef;
+    padding:14px 18px; margin:0 0 18px; border-radius:0 6px 6px 0;
+  }
+  .callout p:last-child{margin-bottom:0}
+  table{border-collapse:collapse;width:100%;margin:0 0 18px;font-size:15px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;width:38%}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  @media (prefers-color-scheme: dark){
+    :root{--ink:#f2ecf5;--muted:#a99bb2;--line:#3a2c40;--bg:#171019}
+    a{color:#d9b3e6}
+    .callout{background:#221722;border-left-color:#cda955}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" stroke="#64346f" stroke-width="1.4" opacity=".35"/>
+        <path d="M6 16c1.6-1 2.6-2.6 3.2-4.6M18 16c-1.6-1-2.6-2.6-3.2-4.6" stroke="#b39037" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="12" cy="9.5" r="3.1" stroke="#64346f" stroke-width="1.4"/>
+      </svg>
+      <span>Better WiSE Page</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Effective 15 November 2026 &middot; Last updated 15 November 2026</p>
+  </header>
+
+  <p>Better WiSE Page changes how the Wesley College WiSE portal looks: one panel for today, a week timetable
+  you can open, and a search box. It collects nothing about you. This page describes what the extension does
+  with the pages it reads, and what it stores on your own machine.</p>
+
+  <h2>Summary</h2>
+  <ul>
+    <li>The extension does not collect personal data.</li>
+    <li>There is no developer server, no account and no analytics.</li>
+    <li>Everything it reads stays in your browser tab and your own browser storage.</li>
+  </ul>
+
+  <h2>What it reads</h2>
+  <p>It runs only on <code>wise.wesleycollege.net</code>. On that site it reads what is already on the page
+  while you are signed in: class names, timetable periods, course announcements and their due dates.
+  That text is used to draw the cards and the summary panel, and it stays inside the page.</p>
+  <p>It does not read your password, other tabs, browsing history, the clipboard or local files. It does not
+  place tracking cookies. It is not injected into any other website.</p>
+
+  <h2>What it stores</h2>
+  <table>
+    <tr><th>Location</th><td>Your own browser profile, through <code>chrome.storage.local</code>.</td></tr>
+    <tr><th>Contents</th><td>Your display settings: theme, animation speed, cards per row, background choices,
+      and which cards you hid. Plus a local cache of pages you already opened, so the panel can draw before the
+      site finishes loading.</td></tr>
+    <tr><th>Server storage</th><td>None. The developer has no backend and receives nothing.</td></tr>
+    <tr><th>Removal</th><td>Clear the caches in the extension settings, or uninstall the extension. Either one
+      deletes the stored data.</td></tr>
+  </table>
+
+  <h2>Network requests</h2>
+  <p>The extension talks to one host: <code>wise.wesleycollege.net</code>, using the session you already have.
+  It sends no data anywhere else. It includes no remote code; every script ships inside the package.</p>
+
+  <h2>What it never does</h2>
+  <ul>
+    <li>No accounts, no sign-up, no email address.</li>
+    <li>No analytics, telemetry, crash reporting or advertising.</li>
+    <li>No sale, rental or sharing of data with anyone.</li>
+    <li>No reading of pages outside the WiSE site.</li>
+  </ul>
+
+  <h2>Student data</h2>
+  <p>The extension is used by students, and course content may concern minors. That content is displayed in
+  your browser and nowhere else. The developer cannot see it.</p>
+
+  <h2>Your control</h2>
+  <p>Turn the panel off, clear the caches in settings, or uninstall the extension. Nothing persists after that.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If the extension's behaviour changes, the date at the top of this page changes with it and the release
+  notes say what changed.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:chris.guo@wesleycollege.edu.au">chris.guo@wesleycollege.edu.au</a></p>
+
+  <footer>
+    Better WiSE Page is an independent student project and is not an official Wesley College product.
+  </footer>
+</main>
+</body>
+</html>

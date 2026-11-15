@@ -1,0 +1,889 @@
+/* Better WiSE dark mode — 全站注入（所有 WiSE 页面） */
+:root{
+  --wt-t-surface:#ffffff;
+  --wt-t-surface-2:#ffffff;
+  --wt-t-surface-2:rgba(255,255,255,.55);
+  --wt-t-glass:rgba(255,255,255,.6);
+  --wt-t-line:rgba(0,0,0,.08);
+  --wt-t-line-strong:rgba(0,0,0,.16);
+  --wt-t-line-soft:rgba(0,0,0,.06);
+  --wt-t-ink:#222222;
+  --wt-t-ink-2:#666666;
+  --wt-t-ink-3:#888888;
+  --wt-t-accent:#64346f;
+  --wt-t-accent-deep:#3f1f49;
+  --wt-t-accent-weak:rgba(100,52,111,.12);
+  --wt-t-hover:rgba(100,52,111,.04);
+  --wt-t-shadow:0 3px 10px rgba(0,0,0,.08);
+  --wt-t-modal-shadow:0 24px 64px rgba(0,0,0,.3);
+  --wt-t-muted-card:#f4f4f4;
+  --wt-t-glow:rgba(255,255,255,.32);
+  --wt-t-panel:#fbf7fd;
+  --wt-t-panel-2:#fbfafc;
+  --wt-t-panel-hi:#f7f1fb;
+  --wt-t-panel-hi-2:rgba(247,241,251,.6);
+  --wt-t-panel-shadow:0 1px 2px rgba(24,16,30,.04),0 18px 44px rgba(24,16,30,.07);
+  --wt-t-head-hover:linear-gradient(135deg,rgba(244,239,248,.9) 0%,rgba(236,226,243,.85) 55%,rgba(255,255,255,0) 100%);
+}
+html[data-wt-theme="dark"]{
+  color-scheme:dark;
+  /* 中性深灰（Edge dark 手感），紫色只留作强调 */
+  --wt-t-surface:#1f1f22;
+  --wt-t-surface-2:#26262a;
+  --wt-t-surface-2:rgba(38,38,42,.82);
+  --wt-t-glass:rgba(255,255,255,.06);
+  --wt-t-line:rgba(255,255,255,.09);
+  --wt-t-line-strong:rgba(255,255,255,.18);
+  --wt-t-line-soft:rgba(255,255,255,.06);
+  --wt-t-ink:#e7e5ea;
+  --wt-t-ink-2:#a9a5b0;
+  --wt-t-ink-3:#827e89;
+  --wt-t-accent:#e7e5ea;
+  --wt-t-accent-deep:#ffffff;
+  --wt-t-accent-weak:rgba(255,255,255,.10);
+  --wt-t-hover:rgba(255,255,255,.06);
+  --wt-t-shadow:0 2px 10px rgba(0,0,0,.55);
+  --wt-t-modal-shadow:0 28px 80px rgba(0,0,0,.72);
+  --wt-t-muted-card:#2a2a2e;
+  --wt-t-glow:rgba(255,255,255,.04);
+  --wt-t-panel:#1b1b1e;
+  --wt-t-panel-2:#202023;
+  --wt-t-panel-hi:#242427;
+  --wt-t-panel-hi-2:rgba(36,36,39,.6);
+  --wt-t-panel-shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px rgba(0,0,0,.55);
+  --wt-t-head-hover:linear-gradient(135deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 55%,rgba(255,255,255,0) 100%);
+  --wt-t-page:#151517;
+}
+
+html[data-wt-theme="dark"]{
+  color-scheme:dark;
+  /* 中性深灰（Edge dark 手感），紫色只留作强调 */
+  --wt-t-surface:#1f1f22;
+  --wt-t-surface-2:#26262a;
+  --wt-t-surface-2:rgba(38,38,42,.82);
+  --wt-t-glass:rgba(255,255,255,.06);
+  --wt-t-line:rgba(255,255,255,.09);
+  --wt-t-line-strong:rgba(255,255,255,.18);
+  --wt-t-line-soft:rgba(255,255,255,.06);
+  --wt-t-ink:#e7e5ea;
+  --wt-t-ink-2:#a9a5b0;
+  --wt-t-ink-3:#827e89;
+  --wt-t-accent:#e7e5ea;
+  --wt-t-accent-deep:#ffffff;
+  --wt-t-accent-weak:rgba(255,255,255,.10);
+  --wt-t-hover:rgba(255,255,255,.06);
+  --wt-t-shadow:0 2px 10px rgba(0,0,0,.55);
+  --wt-t-modal-shadow:0 28px 80px rgba(0,0,0,.72);
+  --wt-t-muted-card:#2a2a2e;
+  --wt-t-glow:rgba(255,255,255,.04);
+  --wt-t-panel:#1b1b1e;
+  --wt-t-panel-2:#202023;
+  --wt-t-panel-hi:#242427;
+  --wt-t-panel-hi-2:rgba(36,36,39,.6);
+  --wt-t-panel-shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px rgba(0,0,0,.55);
+  --wt-t-head-hover:linear-gradient(135deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 55%,rgba(255,255,255,0) 100%);
+  --wt-t-page:#151517;
+}
+html[data-wt-theme="dark"]{color-scheme:dark;}
+html[data-wt-theme="dark"] body{background:#141018 !important;color:#e9e2ef !important;}
+html[data-wt-theme="dark"] .island,
+html[data-wt-theme="dark"] .v-card,
+html[data-wt-theme="dark"] .card,
+html[data-wt-theme="dark"] .panel,
+html[data-wt-theme="dark"] .callout,
+html[data-wt-theme="dark"] .reveal{background:#1f1824 !important;color:#e9e2ef !important;border-color:rgba(255,255,255,.09) !important;}
+html[data-wt-theme="dark"] .subheader,
+html[data-wt-theme="dark"] h1,
+html[data-wt-theme="dark"] h2,
+html[data-wt-theme="dark"] h3,
+html[data-wt-theme="dark"] h4,
+html[data-wt-theme="dark"] label,
+html[data-wt-theme="dark"] .tabs-title > a{color:#f2ecf7 !important;}
+html[data-wt-theme="dark"] p,
+html[data-wt-theme="dark"] li,
+html[data-wt-theme="dark"] td,
+html[data-wt-theme="dark"] .meta,
+html[data-wt-theme="dark"] small{color:#cfc4d8 !important;}
+html[data-wt-theme="dark"] a:not(.button):not([class*="wt-"]){color:#d9d5e0 !important;}
+html[data-wt-theme="dark"] table.timetable th,
+html[data-wt-theme="dark"] table.timetable td{border-color:rgba(255,255,255,.1) !important;color:#e9e2ef !important;}
+html[data-wt-theme="dark"] .timetable-subject{color:#241428 !important;filter:brightness(.92) saturate(.55);}
+html[data-wt-theme="dark"] .timetable-subject a,
+html[data-wt-theme="dark"] .timetable-subject div{color:#241428 !important;}
+html[data-wt-theme="dark"] input,
+html[data-wt-theme="dark"] textarea,
+html[data-wt-theme="dark"] select{background:#241c29 !important;color:#e9e2ef !important;border-color:rgba(255,255,255,.14) !important;}
+html[data-wt-theme="dark"] .island,
+html[data-wt-theme="dark"] section,
+html[data-wt-theme="dark"] .scrollable,
+html[data-wt-theme="dark"] ul.tileList,
+html[data-wt-theme="dark"] dl.tabs,
+html[data-wt-theme="dark"] dl.tabs dd,
+html[data-wt-theme="dark"] li.actions-small-1{background-image:none !important;background-color:#1f1824 !important;}
+html[data-wt-theme="dark"] table.timetable,
+html[data-wt-theme="dark"] table.timetable thead,
+html[data-wt-theme="dark"] table.timetable tbody,
+html[data-wt-theme="dark"] table.timetable tr,
+html[data-wt-theme="dark"] table.timetable th,
+html[data-wt-theme="dark"] table.timetable td{background-image:none !important;background-color:transparent !important;}
+html[data-wt-theme="dark"] .timetable-subject a[href],
+html[data-wt-theme="dark"] .timetable-subject div{color:#241428 !important;}
+html[data-wt-theme="dark"] section,
+html[data-wt-theme="dark"] .scrollable,
+html[data-wt-theme="dark"] table.timetable thead,
+html[data-wt-theme="dark"] table.timetable th,
+html[data-wt-theme="dark"] table.timetable td{background:transparent !important;border-color:rgba(255,255,255,.1) !important;color:#e9e2ef !important;}
+html[data-wt-theme="dark"] ul.tileList,
+html[data-wt-theme="dark"] dl.tabs,
+html[data-wt-theme="dark"] dl.tabs dd,
+html[data-wt-theme="dark"] dl.tabs dd > a{background:#1f1824 !important;color:#e9e2ef !important;}
+html[data-wt-theme="dark"] dl.tabs dd > a{color:#cfc4d8 !important;}
+html[data-wt-theme="dark"] dl.tabs dd.is-active > a{color:#f0dca0 !important;}
+html[data-wt-theme="dark"] aside.left-off-canvas-menu{background:#161019 !important;}
+html[data-wt-theme="dark"] .fc,
+html[data-wt-theme="dark"] .fc-view-harness,
+html[data-wt-theme="dark"] .fc-list-table,
+html[data-wt-theme="dark"] .fc-list-day-cushion,
+html[data-wt-theme="dark"] tr.fc-event,
+html[data-wt-theme="dark"] .fc-daygrid-day,
+html[data-wt-theme="dark"] .fc-scrollgrid,
+html[data-wt-theme="dark"] .fc-theme-standard td,
+html[data-wt-theme="dark"] .fc-theme-standard th{background-color:#1f1824 !important;background-image:none !important;color:#e9e2ef !important;border-color:rgba(255,255,255,.1) !important;}
+html[data-wt-theme="dark"] tr.fc-event:hover{background-color:#2a2130 !important;}
+html[data-wt-theme="dark"] .fc-list-day-cushion a,
+html[data-wt-theme="dark"] .fc-event-time,
+html[data-wt-theme="dark"] .fc-col-header-cell-cushion{color:#efd9a8 !important;}
+html[data-wt-theme="dark"] .fc-event-title,
+html[data-wt-theme="dark"] .fc-event-title-container{color:#cfc4d8 !important;}
+html[data-wt-theme="dark"] table.timetable{background:transparent !important;}
+html[data-wt-theme="dark"] .tabs,
+html[data-wt-theme="dark"] .tabs-panel,
+html[data-wt-theme="dark"] .top-bar,
+html[data-wt-theme="dark"] .menu{background:#1a141f !important;border-color:rgba(255,255,255,.08) !important;}
+html[data-wt-theme="dark"] .wt-modal{background:var(--wt-t-surface);box-shadow:var(--wt-t-modal-shadow);}
+html[data-wt-theme="dark"] .wt-modal-title{color:var(--wt-t-ink);}
+html[data-wt-theme="dark"] body{background:var(--wt-t-page) !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] main,html[data-wt-theme="dark"] article,html[data-wt-theme="dark"] .row,html[data-wt-theme="dark"] .columns{background-color:transparent;}
+html[data-wt-theme="dark"] .top-bar,html[data-wt-theme="dark"] .title-bar,html[data-wt-theme="dark"] .subheader,
+html[data-wt-theme="dark"] .menu,html[data-wt-theme="dark"] .menu li,html[data-wt-theme="dark"] .off-canvas,
+html[data-wt-theme="dark"] .left-off-canvas-menu,html[data-wt-theme="dark"] .right-off-canvas-menu,
+html[data-wt-theme="dark"] ul.side-nav,html[data-wt-theme="dark"] .side-nav li,html[data-wt-theme="dark"] .side-nav a{background-color:#1c1c1f !important;background-image:none !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] .side-nav a:hover,html[data-wt-theme="dark"] .menu li a:hover{background-color:rgba(255,255,255,.06) !important;}
+html[data-wt-theme="dark"] .island,html[data-wt-theme="dark"] .v-card,html[data-wt-theme="dark"] .card,
+html[data-wt-theme="dark"] .panel,html[data-wt-theme="dark"] .callout,html[data-wt-theme="dark"] .reveal,
+html[data-wt-theme="dark"] .empty-state,html[data-wt-theme="dark"] div.empty-state,html[data-wt-theme="dark"] div.card-feature-avatar{background-color:var(--wt-t-surface) !important;background-image:none !important;border-color:var(--wt-t-line) !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] label{background-color:transparent !important;color:#cfcbd6 !important;}
+html[data-wt-theme="dark"] .label,html[data-wt-theme="dark"] .small,html[data-wt-theme="dark"] .meta,
+html[data-wt-theme="dark"] .subheader,html[data-wt-theme="dark"] .breadcrumbs a,html[data-wt-theme="dark"] .breadcrumbs{color:var(--wt-t-ink-2) !important;}
+html[data-wt-theme="dark"] a.button,html[data-wt-theme="dark"] .button,html[data-wt-theme="dark"] button.button,
+html[data-wt-theme="dark"] a.install-button,html[data-wt-theme="dark"] a.enable-notif-button,
+html[data-wt-theme="dark"] a.load-more,html[data-wt-theme="dark"] a.mark-all-read.button,
+html[data-wt-theme="dark"] .callout .button{background-color:#2a2a2e !important;background-image:none !important;color:var(--wt-t-ink) !important;border-color:rgba(255,255,255,.14) !important;}
+html[data-wt-theme="dark"] a.button:hover,html[data-wt-theme="dark"] .button:hover{background-color:#34343a !important;}
+html[data-wt-theme="dark"] li.content.pwa-side-panel,html[data-wt-theme="dark"] .pwa-side-panel{background-color:#1f1f22 !important;background-image:none !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] input,html[data-wt-theme="dark"] select,html[data-wt-theme="dark"] textarea{
+  background-color:#232326 !important;color:var(--wt-t-ink) !important;border-color:rgba(255,255,255,.14) !important;}
+html[data-wt-theme="dark"] input::placeholder,html[data-wt-theme="dark"] textarea::placeholder{color:#7e7a86 !important;}
+html[data-wt-theme="dark"] table,html[data-wt-theme="dark"] thead,html[data-wt-theme="dark"] tbody,
+html[data-wt-theme="dark"] tr,html[data-wt-theme="dark"] td,html[data-wt-theme="dark"] th,
+html[data-wt-theme="dark"] table.fc-col-header,html[data-wt-theme="dark"] table.fc-scrollgrid-sync-table{
+  background-color:transparent !important;background-image:none !important;border-color:rgba(255,255,255,.09) !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] table.island,html[data-wt-theme="dark"] table.fc-scrollgrid{background-color:var(--wt-t-surface) !important;}
+html[data-wt-theme="dark"] hr,html[data-wt-theme="dark"] fieldset{border-color:rgba(255,255,255,.1) !important;}
+html[data-wt-theme="dark"] .fc-toolbar-title,html[data-wt-theme="dark"] .fc-button{color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] .fc-button{background-color:#2a2a2e !important;border-color:rgba(255,255,255,.14) !important;}
+html[data-wt-theme="dark"] .fc-daygrid-day-number,html[data-wt-theme="dark"] .fc-col-header-cell-cushion{color:var(--wt-t-ink-2) !important;}
+html[data-wt-theme="dark"] .wt-modal{background:var(--wt-t-panel) !important;color:var(--wt-t-ink) !important;border-color:var(--wt-t-line) !important;box-shadow:var(--wt-t-modal-shadow) !important;}
+html[data-wt-theme="dark"] .wt-modal-head,html[data-wt-theme="dark"] .wt-modal-body{background:transparent !important;color:var(--wt-t-ink) !important;border-color:var(--wt-t-line) !important;}
+html[data-wt-theme="dark"] .wt-modal-title,html[data-wt-theme="dark"] .wt-modal h1,html[data-wt-theme="dark"] .wt-modal h2,
+html[data-wt-theme="dark"] .wt-modal h3,html[data-wt-theme="dark"] .wt-modal p,html[data-wt-theme="dark"] .wt-modal li{color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] .wt-modal .wt-detail,html[data-wt-theme="dark"] .wt-modal .wt-meta,
+html[data-wt-theme="dark"] .wt-modal small,html[data-wt-theme="dark"] .wt-field-label{color:var(--wt-t-ink-2) !important;}
+html[data-wt-theme="dark"] .wt-modal-caret,html[data-wt-theme="dark"] .wt-modal-x,html[data-wt-theme="dark"] .wt-modal-go,
+html[data-wt-theme="dark"] .wt-set-x,html[data-wt-theme="dark"] .wt-modal-btn{background:rgba(255,255,255,.06) !important;color:var(--wt-t-ink) !important;border-color:rgba(255,255,255,.12) !important;}
+html[data-wt-theme="dark"] .wt-modal-x svg,html[data-wt-theme="dark"] .wt-set-x svg{color:var(--wt-t-ink) !important;fill:currentColor;}
+/* 箭头是 open path + stroke 画的：一旦 fill:currentColor 就会把两端连成实心三角形 */
+html[data-wt-theme="dark"] .wt-modal-caret svg,html[data-wt-theme="dark"] .wt-chev svg{color:var(--wt-t-ink) !important;fill:none !important;stroke:currentColor !important;}
+html[data-wt-theme="dark"] .wt-modal-caret:hover,html[data-wt-theme="dark"] .wt-modal-x:hover,
+html[data-wt-theme="dark"] .wt-modal-go:hover,html[data-wt-theme="dark"] .wt-modal-btn:hover{background:rgba(255,255,255,.12) !important;}
+html[data-wt-theme="dark"] .wt-form input,html[data-wt-theme="dark"] .wt-form select,html[data-wt-theme="dark"] .wt-form textarea{background-color:#232326 !important;color:var(--wt-t-ink) !important;border-color:rgba(255,255,255,.14) !important;}
+html[data-wt-theme="dark"] .wt-modal a:not(.button){color:#cbb3e8 !important;}
+html[data-wt-theme="dark"] .wt-modal .wt-links a,html[data-wt-theme="dark"] .wt-file a{color:#cbb3e8 !important;border-color:rgba(255,255,255,.12) !important;}
+html[data-wt-theme="dark"] .wt-set-pop,html[data-wt-theme="dark"] .wt-settings-pop{background:var(--wt-t-panel-2) !important;color:var(--wt-t-ink) !important;border-color:var(--wt-t-line) !important;box-shadow:0 18px 44px rgba(0,0,0,.6) !important;}
+html[data-wt-theme="dark"] .wt-set-head,html[data-wt-theme="dark"] .wt-set-section{color:var(--wt-t-ink) !important;border-color:var(--wt-t-line) !important;}
+html[data-wt-theme="dark"] .wt-snackbar,html[data-wt-theme="dark"] .wt-confirm-floating{background:#2a2a2e !important;color:var(--wt-t-ink) !important;border:1px solid rgba(255,255,255,.12) !important;box-shadow:0 12px 30px rgba(0,0,0,.6) !important;}
+html[data-wt-theme="dark"] .wt-snackbar button,html[data-wt-theme="dark"] .wt-confirm-floating button{color:var(--wt-t-accent) !important;}
+html[data-wt-theme="dark"] .wt-check{background:rgba(255,255,255,.06) !important;border-color:rgba(255,255,255,.16) !important;color:var(--wt-t-ink-2) !important;}
+html[data-wt-theme="dark"] .wt-check.on{background:var(--wt-t-accent) !important;border-color:var(--wt-t-accent) !important;color:#201a26 !important;}
+html[data-wt-theme="dark"] .wt-due-days{color:var(--wt-t-ink-3) !important;}
+html[data-wt-theme="dark"] .wt-due-days.soon{color:#e0b46a !important;}
+html[data-wt-theme="dark"] .wt-skeleton,html[data-wt-theme="dark"] .wt-sk{background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.11),rgba(255,255,255,.05)) !important;}
+html[data-wt-theme="dark"] .wt-summary{background:var(--wt-t-panel) !important;box-shadow:0 1px 2px rgba(0,0,0,.5),0 14px 34px rgba(0,0,0,.45) !important;}
+html[data-wt-theme="dark"] .wt-summary-head{background:var(--wt-t-surface) !important;}
+html[data-wt-theme="dark"] .wt-tab-content,html[data-wt-theme="dark"] .wt-tab-body{background:transparent !important;}
+html[data-wt-theme="dark"] html.wt-perf{--wt-t-surface:#1f1f22;}
+html[data-wt-theme="dark"] .wt-modal-files a{color:#e7e5ea;border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.05);}
+html[data-wt-theme="dark"] .wt-modal-files a:hover{background:#e7e5ea;color:#1b1b1e;border-color:#e7e5ea;}
+html[data-wt-theme="dark"] .wt-modal-go{color:#1b1b1e !important;}
+html[data-wt-theme="dark"] aside.left-off-canvas-menu,
+html[data-wt-theme="dark"] aside.right-off-canvas-menu,
+html[data-wt-theme="dark"] .off-canvas,
+html[data-wt-theme="dark"] .off-canvas-wrap,
+html[data-wt-theme="dark"] .inner-wrap,
+html[data-wt-theme="dark"] ul.side-nav,
+html[data-wt-theme="dark"] ul.side-nav li,
+html[data-wt-theme="dark"] dl.tabs,
+html[data-wt-theme="dark"] dl.tabs dd,
+html[data-wt-theme="dark"] li.content.pwa-side-panel,
+html[data-wt-theme="dark"] li.actions-small-1,
+html[data-wt-theme="dark"] li.actions-small-1.status-read,
+html[data-wt-theme="dark"] table.fc-scrollgrid,
+html[data-wt-theme="dark"] table.fc-col-header,
+html[data-wt-theme="dark"] table.fc-scrollgrid-sync-table,
+html[data-wt-theme="dark"] table.timetable,
+html[data-wt-theme="dark"] table.timetable thead,
+html[data-wt-theme="dark"] table.timetable tbody tr,
+html[data-wt-theme="dark"] tr,
+html[data-wt-theme="dark"] td.fc-day,
+html[data-wt-theme="dark"] th.fc-col-header-cell,
+html[data-wt-theme="dark"] select,
+html[data-wt-theme="dark"] option { background-image: none !important; background-color: #1b1b1e !important; }
+html[data-wt-theme="dark"] td.fc-day-today,
+html[data-wt-theme="dark"] td.fc-day-today.fc-day { background-color: #26262a !important; }
+html[data-wt-theme="dark"] .fc-event,
+html[data-wt-theme="dark"] a.fc-event { filter: brightness(.92) saturate(.6); }
+html[data-wt-theme="dark"] .timetable-subject { filter: brightness(.92) saturate(.55); }
+/* 主页那排应用磁贴（ul.tileList）：图标是烤进 background-image 的，降低饱和度只能整个 li 上滤镜 */
+html[data-wt-theme="dark"] ul.tileList li.tile { filter: brightness(.92) saturate(.55); }
+html[data-wt-theme="dark"] ul.side-nav a,
+html[data-wt-theme="dark"] li.content.pwa-side-panel a,
+html[data-wt-theme="dark"] li.actions-small-1 a { color: #d9d5e0 !important; }
+html[data-wt-theme="dark"] table.timetable th,
+html[data-wt-theme="dark"] table.timetable td { border-color: rgba(255,255,255,.08) !important; }
+html[data-wt-theme="dark"] td.fc-daygrid-day,
+html[data-wt-theme="dark"] td.fc-daygrid-day-frame,
+html[data-wt-theme="dark"] .fc-daygrid-day-frame,
+html[data-wt-theme="dark"] .fc-daygrid-day-top,
+html[data-wt-theme="dark"] .fc-daygrid-day-events,
+html[data-wt-theme="dark"] .fc-daygrid-day-bg,
+html[data-wt-theme="dark"] .fc-daygrid-body,
+html[data-wt-theme="dark"] .fc-timegrid-slot,
+html[data-wt-theme="dark"] .fc-timegrid-col,
+html[data-wt-theme="dark"] .fc-list-day-cushion,
+html[data-wt-theme="dark"] .fc-list-event:hover td { background-image: none !important; background-color: #1b1b1e !important; }
+html[data-wt-theme="dark"] .fc-daygrid-day-top a,
+html[data-wt-theme="dark"] .fc-col-header-cell a,
+html[data-wt-theme="dark"] .fc-daygrid-day-number { color: #e7e5ea !important; }
+html[data-wt-theme="dark"] .fc-event,
+html[data-wt-theme="dark"] .fc-event * { color: #241f28 !important; }
+html[data-wt-theme="dark"] .fc-event { filter: none; }
+html[data-wt-theme="dark"] .fc-scroller { background-color: #1b1b1e !important; }
+html[data-wt-theme="dark"] .fc-scrollgrid-section > td,
+html[data-wt-theme="dark"] .fc-scrollgrid-section-header > td,
+html[data-wt-theme="dark"] .fc-scrollgrid-section-body > td,
+html[data-wt-theme="dark"] .fc-scrollgrid-sync-inner,
+html[data-wt-theme="dark"] .fc-daygrid-body,
+html[data-wt-theme="dark"] .fc-daygrid-body-unbalanced,
+html[data-wt-theme="dark"] .fc-daygrid-body-balanced { background-image: none !important; background-color: #1b1b1e !important; }
+html[data-wt-theme="dark"] dl.tabs dd a,
+html[data-wt-theme="dark"] dl.tabs a,
+html[data-wt-theme="dark"] ul.side-nav a,
+html[data-wt-theme="dark"] .side-nav a,
+html[data-wt-theme="dark"] .right-off-canvas-menu a,
+html[data-wt-theme="dark"] .left-off-canvas-menu a,
+html[data-wt-theme="dark"] .sub-nav a,
+html[data-wt-theme="dark"] .breadcrumbs a,
+html[data-wt-theme="dark"] .menu a,
+html[data-wt-theme="dark"] li.content.pwa-side-panel a,
+html[data-wt-theme="dark"] .news-feed-tabs a,
+html[data-wt-theme="dark"] .feed-tabs a { color: #d9d5e0 !important; }
+html[data-wt-theme="dark"] dl.tabs dd.active a,
+html[data-wt-theme="dark"] ul.side-nav li.active a,
+html[data-wt-theme="dark"] .side-nav li.active a { color: #ffffff !important; }
+html[data-wt-theme="dark"] dl.tabs dd.active,
+html[data-wt-theme="dark"] ul.side-nav li.active { background-color: #26262a !important; }
+html[data-wt-theme="dark"] #news-component section,
+html[data-wt-theme="dark"] #news-component .tabs-content,
+html[data-wt-theme="dark"] #news-component dl.tabs,
+html[data-wt-theme="dark"] #news-component .tabs { background:#17161a !important; background-image:none !important; border-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] #news-component article { background:transparent !important; border-bottom:1px solid var(--wt-t-line) !important; color:var(--wt-t-ink) !important; }
+html[data-wt-theme="dark"] #news-component article p,
+html[data-wt-theme="dark"] #news-component article li,
+html[data-wt-theme="dark"] #news-component article span { color:var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] #news-component article a { color:#c9a4e6 !important; }
+html[data-wt-theme="dark"] #news-component dl.tabs dd a { color:var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] #news-component dl.tabs dd.active a { color:#f2ebf7 !important; }
+html[data-wt-theme="dark"] #content > .row > .columns > h1,
+html[data-wt-theme="dark"] #content > .row > .columns > h2,
+html[data-wt-theme="dark"] #content h1,
+html[data-wt-theme="dark"] #content h2,
+html[data-wt-theme="dark"] #content h3 { color:var(--wt-t-ink) !important; }
+
+html[data-wt-theme="dark"] .empty-state { background:#17161a !important; color:var(--wt-t-ink-2) !important; border-color:var(--wt-t-line) !important; }
+
+/* 课表卡片保留了站点自己的柔色底，深色模式下文字必须仍然用深色，否则浅底浅字看不见 */
+html[data-wt-theme="dark"] table.wt-table td.wt-card,
+html[data-wt-theme="dark"] table.timetable td.wt-card,
+html[data-wt-theme="dark"] table.timetable td.wt-card *,
+html[data-wt-theme="dark"] .timetable-subject,
+html[data-wt-theme="dark"] .timetable-subject * { color:#2a2233 !important; }
+/* 日历/日程卡片里原本是 #64346f 的链接，暗底上等于隐形 */
+html[data-wt-theme="dark"] #content .island .subheader,
+html[data-wt-theme="dark"] #content .island .fc-event,
+/* 日历事件标题：站点用深底 + 浅紫字，暗色下本来就够对比，不再强改 */
+html[data-wt-theme="dark"] .fc-list-event-title { color:#e7e5ea !important; }
+
+/* 课表卡片里的科目链接：上面那条日历链接规则会把它也染成浅紫，这里按更高优先级压回深色 */
+html[data-wt-theme="dark"] #content .island table.wt-table td.wt-card a,
+html[data-wt-theme="dark"] #content .island table.wt-table td.wt-card a *,
+html[data-wt-theme="dark"] #content .island table.wt-table td.wt-card .timetable-subject a { color:#2a2233 !important; }
+
+/* 日历列表（右侧 Calendar）标题是 td 里的 <a>，颜色走站点自己的 #64346f，暗底上等于隐形 */
+html[data-wt-theme="dark"] .fc-list-table td,
+html[data-wt-theme="dark"] .fc-list-table td a,
+html[data-wt-theme="dark"] .fc-list-table td span,
+html[data-wt-theme="dark"] .fc-list-event-title,
+html[data-wt-theme="dark"] .fc-list-event-title * { color:#e7e5ea !important; }
+html[data-wt-theme="dark"] .fc-list-table .fc-list-event-time { color:#a9a5b0 !important; }
+
+/* ===== 班级页 / 校园页的站点容器（审计 2026-11-05 抓出来的白块） ===== */
+html[data-wt-theme="dark"] ul.news-list > li,
+html[data-wt-theme="dark"] ul.information-list > li,
+html[data-wt-theme="dark"] li.interact,
+html[data-wt-theme="dark"] li.interact.expanded,
+html[data-wt-theme="dark"] #pastoralRecords li.actions,
+html[data-wt-theme="dark"] .sb-ck-callout,
+html[data-wt-theme="dark"] .OutlineElement,
+html[data-wt-theme="dark"] figure.table table,
+html[data-wt-theme="dark"] .ck-table-resized td,
+html[data-wt-theme="dark"] .ck-table-resized td > div { background-color:#1f1f22 !important; background-image:none !important; border-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] ul.news-list > li a,
+html[data-wt-theme="dark"] ul.information-list > li a,
+html[data-wt-theme="dark"] li.interact a,
+html[data-wt-theme="dark"] .OutlineElement a { color:#cfb2ea !important; }
+html[data-wt-theme="dark"] ul.news-list > li h1,
+html[data-wt-theme="dark"] ul.news-list > li h2,
+html[data-wt-theme="dark"] ul.news-list > li h3,
+html[data-wt-theme="dark"] ul.news-list > li p,
+html[data-wt-theme="dark"] li.interact h1,
+html[data-wt-theme="dark"] li.interact h2,
+html[data-wt-theme="dark"] li.interact p { color:var(--wt-t-ink-2) !important; }
+
+
+/* 剩下的三处：CKEditor 的提示块/高亮 span，以及问卷组件的按钮行 */
+html[data-wt-theme="dark"] .sb-ck-callout,
+html[data-wt-theme="dark"] [class*="sb-ck-callout"] { background-color:rgba(255,255,255,.06) !important; background-image:none !important; border-color:var(--wt-t-line) !important; color:var(--wt-t-ink-2) !important; }
+/* 老师会用 <span style="color:#c00"> 标重点。原来一刀切成白底白字，现在保留原色，
+   只把"深到看不清"的颜色调亮（由 theme-fix.js 里的 brightenRichText 处理，见文件注释）。 */
+html[data-wt-theme="dark"] #content article p span,
+html[data-wt-theme="dark"] #content article li span { background-color:transparent !important; }
+html[data-wt-theme="dark"] #content article .wt-color-lifted { background-color:rgba(255,255,255,.05) !important; }
+html[data-wt-theme="dark"] .component-container ul.actions,
+html[data-wt-theme="dark"] .component-container ul.actions > li { background-color:transparent !important; background-image:none !important; }
+html[data-wt-theme="dark"] ul.action-list,
+html[data-wt-theme="dark"] ul.action-list > li,
+html[data-wt-theme="dark"] ul.action-list > li a { background-color:transparent !important; background-image:none !important; }
+html[data-wt-theme="dark"] ul.action-list > li a { color:#cfb2ea !important; }
+
+
+
+/* ===== BW Search 覆盖层（search.js 自己那套 UI，独立于面板） ===== */
+html[data-wt-theme="dark"] .wt-sr-overlay { background:rgba(10,8,12,.55) !important; }
+html[data-wt-theme="dark"] .wt-sr-card { background:#1f1f22 !important; border-color:var(--wt-t-line) !important; box-shadow:0 24px 60px rgba(0,0,0,.72) !important; }
+html[data-wt-theme="dark"] .wt-sr-head { background:#232326 !important; border-bottom-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] .wt-sr-input { background:#2a2a2e !important; color:var(--wt-t-ink) !important; border-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] .wt-sr-input::placeholder { color:#827e89 !important; }
+html[data-wt-theme="dark"] .wt-sr-chips-inner { background:#232326 !important; box-shadow:inset 2px 2px 5px -2px rgba(0,0,0,.5), inset -1px -1px 2px rgba(255,255,255,.05) !important; }
+html[data-wt-theme="dark"] .wt-sr-chip { color:var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] .wt-sr-chip.active { color:#fff !important; }
+html[data-wt-theme="dark"] .wt-sr-pill { background:rgba(255,255,255,.14) !important; }
+html[data-wt-theme="dark"] .wt-sr-row { background:transparent !important; color:var(--wt-t-ink) !important; border-color:var(--wt-t-line-soft) !important; }
+html[data-wt-theme="dark"] .wt-sr-row:hover,
+html[data-wt-theme="dark"] .wt-sr-row.active { background:rgba(255,255,255,.06) !important; }
+html[data-wt-theme="dark"] .wt-sr-row * { color:inherit !important; }
+html[data-wt-theme="dark"] .wt-sr-title { color:var(--wt-t-ink) !important; }
+html[data-wt-theme="dark"] .wt-sr-sub,
+html[data-wt-theme="dark"] .wt-sr-status,
+html[data-wt-theme="dark"] .wt-sr-empty { color:var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] .wt-sr-badge { background:rgba(255,255,255,.1) !important; color:#d6b9e8 !important; }
+html[data-wt-theme="dark"] .wt-sr-foot { background:#232326 !important; border-top-color:var(--wt-t-line) !important; color:var(--wt-t-ink-3) !important; }
+html[data-wt-theme="dark"] .wt-sr-close,
+html[data-wt-theme="dark"] .wt-sr-clear,
+html[data-wt-theme="dark"] .wt-sr-refresh,
+html[data-wt-theme="dark"] .wt-sr-setbtn { background:rgba(255,255,255,.08) !important; color:var(--wt-t-ink) !important; border-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] .wt-sr-setpanel { background:#1f1f22 !important; border-color:var(--wt-t-line) !important; box-shadow:0 16px 48px rgba(0,0,0,.7) !important; }
+html[data-wt-theme="dark"] .wt-sr-chips,
+html[data-wt-theme="dark"] .wt-sr-status { background:#232326 !important; border-bottom-color:var(--wt-t-line-soft) !important; color:var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] .wt-sr-chips-inner { background:transparent !important; }
+html[data-wt-theme="dark"] .wt-sr-list { background:#1f1f22 !important; }
+html[data-wt-theme="dark"] .wt-sr-head .wt-sr-glass { color:#cfb2ea !important; }
+
+/* ===== 复选框/开关：暗色下改常规中性风格（用户 beta7 要求去掉紫色勾） ===== */
+html[data-wt-theme="dark"] [data-wesley-home] .wt-check { background:#2a2a2e !important; border-color:rgba(255,255,255,.35) !important; color:#1a1a1f !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-check:hover { background:#34343a !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-check.on { background:#e7e5ea !important; border-color:#e7e5ea !important; color:#1a1a1f !important; }
+/* .switch 是整行容器（能有 400px 宽），真正那个小药丸是里面的 <label>，
+   以前把背景刷在容器上，暗色里就变成一条横贯整行的灰条。改成只画 label。 */
+html[data-wt-theme="dark"] .switch { background: transparent !important; }
+html[data-wt-theme="dark"] .switch > label {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.28) !important;
+  color: #d9d5e0 !important;
+}
+html[data-wt-theme="dark"] .switch input:checked + label {
+  background: rgba(201,166,234,.18) !important;
+  border-color: #c9a6ea !important;
+}
+html[data-wt-theme="dark"] .switch > label,
+html[data-wt-theme="dark"] .switch > label * { color: #d9d5e0 !important; opacity: 1 !important; }
+html[data-wt-theme="dark"] .switch label::after { background: #b9b5c2 !important; }
+html[data-wt-theme="dark"] .switch input:checked + label::after { background: #fff !important; }
+html[data-wt-theme="dark"] .switch .knob { background:#b9b5c2 !important; }
+html[data-wt-theme="dark"] .switch.on { background: transparent !important; }
+html[data-wt-theme="dark"] .switch.on .knob { background:#fff !important; }
+html[data-wt-theme="dark"] input[type="checkbox"] { accent-color:#e7e5ea; }
+html[data-wt-theme="dark"] input[type="radio"] { accent-color:#e7e5ea; }
+
+/* 暗色滚动条（白条太扎眼） */
+html[data-wt-theme="dark"] { scrollbar-color:#4a4a54 #1b1b1e; }
+html[data-wt-theme="dark"] .wt-sr-list,
+html[data-wt-theme="dark"] [data-wesley-home] .wt-summary-body,
+html[data-wt-theme="dark"] .wt-set-pop { scrollbar-color:#4a4a54 transparent; scrollbar-width:thin; }
+html[data-wt-theme="dark"] .wt-sr-list::-webkit-scrollbar,
+html[data-wt-theme="dark"] [data-wesley-home] *::-webkit-scrollbar { width:10px; height:10px; }
+html[data-wt-theme="dark"] .wt-sr-list::-webkit-scrollbar-track,
+html[data-wt-theme="dark"] [data-wesley-home] *::-webkit-scrollbar-track { background:transparent; }
+html[data-wt-theme="dark"] .wt-sr-list::-webkit-scrollbar-thumb,
+html[data-wt-theme="dark"] [data-wesley-home] *::-webkit-scrollbar-thumb { background:#4a4a54; border-radius:999px; }
+
+/* 表单控件（反馈表/筛选框）：站点只给部分控件写了暗色 */
+html[data-wt-theme="dark"] #content input[type="text"]:not(.wt-sr-input),
+html[data-wt-theme="dark"] #content input[type="email"]:not(.wt-sr-input),
+html[data-wt-theme="dark"] #content input[type="search"]:not(.wt-sr-input),
+html[data-wt-theme="dark"] #content input[type="password"]:not(.wt-sr-input),
+html[data-wt-theme="dark"] #content input[type="number"]:not(.wt-sr-input),
+html[data-wt-theme="dark"] #content textarea,
+html[data-wt-theme="dark"] #content select { background-color:#232326 !important; color:var(--wt-t-ink) !important; border-color:var(--wt-t-line) !important; }
+html[data-wt-theme="dark"] #content input::placeholder,
+html[data-wt-theme="dark"] #content textarea::placeholder { color:#827e89 !important; }
+
+/* ===== 模态弹窗 / 课程下拉菜单：里面的字色是写死的浅色主题值，暗色下要逐层改 ===== */
+html[data-wt-theme="dark"] .wt-modal { background:#1f1f22 !important; color:#e7e5ea !important; box-shadow:0 18px 48px rgba(0,0,0,.55) !important; }
+html[data-wt-theme="dark"] .wt-modal-title { color:#fff !important; }
+html[data-wt-theme="dark"] .wt-modal-sub,
+html[data-wt-theme="dark"] .wt-modal-detail,
+html[data-wt-theme="dark"] .wt-modal-body,
+html[data-wt-theme="dark"] .wt-modal-list,
+html[data-wt-theme="dark"] .wt-modal-li { color:#dcd7e3 !important; }
+html[data-wt-theme="dark"] .wt-modal-meta,
+html[data-wt-theme="dark"] .wt-modal-time,
+html[data-wt-theme="dark"] .wt-modal-x { color:#a9a5b0 !important; }
+html[data-wt-theme="dark"] .wt-modal-days { color:#cfb2ea !important; }
+html[data-wt-theme="dark"] .wt-modal-cls,
+html[data-wt-theme="dark"] .wt-modal-detail a,
+html[data-wt-theme="dark"] .wt-modal-links a,
+html[data-wt-theme="dark"] .wt-modal-files a { color:#cfb2ea !important; }
+html[data-wt-theme="dark"] .wt-modal-li-title { color:#e7e5ea !important; }
+html[data-wt-theme="dark"] .wt-modal-li-detail { color:#a9a5b0 !important; }
+html[data-wt-theme="dark"] .wt-modal-course { color:#e7e5ea !important; background:transparent !important; }
+html[data-wt-theme="dark"] .wt-modal-course:hover { background:rgba(255,255,255,.10) !important; }
+html[data-wt-theme="dark"] .wt-modal-menu { background:#232326 !important; border-color:rgba(255,255,255,.12) !important; color:#cfc9d6 !important; box-shadow:0 14px 36px rgba(0,0,0,.5) !important; }
+html[data-wt-theme="dark"] .wt-modal-menu * { color:inherit !important; }
+html[data-wt-theme="dark"] .wt-modal-caret { color:#b9b4c0 !important; }
+html[data-wt-theme="dark"] .wt-modal-actions { border-top-color:rgba(255,255,255,.10) !important; }
+html[data-wt-theme="dark"] .wt-nextday-row { border-bottom-color:rgba(255,255,255,.08) !important; }
+html[data-wt-theme="dark"] .wt-nextday-name { color:#e7e5ea !important; }
+html[data-wt-theme="dark"] .wt-nextday-time,
+html[data-wt-theme="dark"] .wt-nextday-empty { color:#a9a5b0 !important; }
+html[data-wt-theme="dark"] .wt-nextday-task { background:rgba(207,178,234,.16) !important; color:#dcc4ee !important; }
+
+/* 面板"Upcoming Learning Activities"里科目名是 <b>，写死的深色 */
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up li b { color:#e7e5ea !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up li .wt-topic { color:#a9a5b0 !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up li > span:not(.wt-cd) { color:#dcd7e3; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up li .wt-cd.soon { color:#f08a7e !important; }
+
+/* 面包屑（/homepage/<id> 页顶）：站点给 <li> 里的 span 写了黑色 */
+html[data-wt-theme="dark"] #content ul.breadcrumb,
+html[data-wt-theme="dark"] #content ul.breadcrumb li,
+html[data-wt-theme="dark"] #content ul.breadcrumb li a,
+html[data-wt-theme="dark"] #content ul.breadcrumb li span { color:#cfc4d8 !important; }
+html[data-wt-theme="dark"] #content ul.breadcrumb li a:hover { color:#fff !important; }
+html[data-wt-theme="dark"] #content ul.breadcrumb li::after,
+html[data-wt-theme="dark"] #content ul.breadcrumb li:after { color:#8d8798 !important; }
+
+/* Upcoming 面板右侧 ＋/－ 按钮在暗色下还是白底 */
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up-head .wt-up-btn {
+  background:#2a2a2e !important; color:#d6b9e8 !important; border-color:rgba(255,255,255,.22) !important;
+}
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up-head .wt-up-btn:hover { background:#64346f !important; color:#fff !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-up-head .wt-up-btn.on { background:#64346f !important; color:#fff !important; border-color:transparent !important; }
+
+/* ===== 2026-11-05 补：暗色下几个页面上残留的亮块 =====
+   都是逐页巡完截图 + 亮度扫描之后抓出来的：站点自己给这些组件写了白底，
+   主题里没有对应的暗色版本。 */
+
+/* /news 底部分页器：整排白方块 */
+html[data-wt-theme="dark"] ul.pagination li > a.page-link,
+html[data-wt-theme="dark"] ul.pagination li > a.arrow {
+  background:#232326 !important; color:#d9d5e0 !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+}
+html[data-wt-theme="dark"] ul.pagination li.active > a.page-link {
+  background:#64346f !important; color:#fff !important; border-color:#64346f !important;
+}
+html[data-wt-theme="dark"] ul.pagination li.unavailable > a.arrow,
+html[data-wt-theme="dark"] ul.pagination li.disabled > a {
+  background:#1a1a1d !important; color:#615d69 !important; border-color:rgba(255,255,255,.06) !important;
+}
+html[data-wt-theme="dark"] ul.pagination li > a:hover { background:#2f2f35 !important; color:#fff !important; }
+
+/* /learning/classes 学期切换的左右箭头：白底方框 */
+html[data-wt-theme="dark"] .context-switch nav a {
+  background:#232326 !important; color:#d9d5e0 !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+}
+html[data-wt-theme="dark"] .context-switch nav a:hover { background:#2f2f35 !important; color:#fff !important; }
+
+/* Due 卡上的"还剩 N 小时"：纯红 #ea0a06 压在暗底上对比度只有 1.6，
+   换成同色相提亮版，紧急感还在，但读得清 */
+html[data-wt-theme="dark"] span.gradient-0 { color:#ff8f80 !important; }
+
+/* /resources 文件树：选中/悬停行原来是浅灰紫 */
+html[data-wt-theme="dark"] .jstree-wholerow-clicked { background:#3a2a44 !important; }
+html[data-wt-theme="dark"] .jstree-wholerow-hovered { background:#2a2630 !important; }
+
+/* /learning/classes 课程卡顶部的大色块：站点用纯色铺满整块，
+   和其他地方（课表格子 .timetable-subject）的处理保持一致，压暗、降饱和，
+   白色图标仍然亮着，色相不变，一眼还能认出是哪门课。 */
+html[data-wt-theme="dark"] .card-class-image { filter: brightness(.78) saturate(.62); }
+
+/* /learning/grades（Feedback）里老师的评语是浅灰 blockquote，暗色下变成一排白条，
+   正文又是浅色，几乎读不出来。改成深底浅字。 */
+html[data-wt-theme="dark"] blockquote {
+  background: #232227 !important;
+  color: #ddd9e3 !important;
+  border-left: 3px solid rgba(255,255,255,.18) !important;
+}
+html[data-wt-theme="dark"] blockquote * { color: inherit !important; }
+html[data-wt-theme="dark"] blockquote a { color: #c9a6ea !important; }
+
+/* /pastoral 的行为记录图表是 Highcharts，默认白底画在 SVG rect 里，CSS 背景改不到，
+   只能改 .highcharts-background 的 fill。坐标轴和图标文字一起提亮，否则深底上看不见。 */
+html[data-wt-theme="dark"] .highcharts-background { fill: #1f1f22 !important; }
+html[data-wt-theme="dark"] .highcharts-grid-line { stroke: rgba(255,255,255,.10) !important; }
+html[data-wt-theme="dark"] .highcharts-axis-labels text,
+html[data-wt-theme="dark"] .highcharts-legend-item text,
+html[data-wt-theme="dark"] .highcharts-title,
+html[data-wt-theme="dark"] .highcharts-subtitle,
+html[data-wt-theme="dark"] .highcharts-plot-line-label { fill: #cfc9d6 !important; }
+
+/* 站点原生弹层没有自己的暗色皮肤：此前只把文字改成浅色，背景仍是白的，
+   于是「白底浅字」几乎读不出来（Calendar 点事件、Export、确认框、日期选择器都是这一类）。
+   这里连背景、边框、遮罩一起压暗，文字维持浅色。基础类是 Foundation 的 .reveal-modal。 */
+html[data-wt-theme="dark"] .reveal-modal,
+html[data-wt-theme="dark"] .fc-popover,
+html[data-wt-theme="dark"] .f-dropdown,
+html[data-wt-theme="dark"] .dropdown-pane,
+html[data-wt-theme="dark"] .selectize-dropdown,
+html[data-wt-theme="dark"] .ui-datepicker,
+html[data-wt-theme="dark"] .pika-single {
+  background-color: #1b1b1e !important;
+  background-image: none !important;
+  color: var(--wt-t-ink) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: 0 24px 64px rgba(0,0,0,.66) !important;
+  color-scheme: dark;
+}
+html[data-wt-theme="dark"] .reveal-modal form,
+html[data-wt-theme="dark"] .reveal-modal section,
+html[data-wt-theme="dark"] .reveal-modal fieldset,
+html[data-wt-theme="dark"] .reveal-modal .content,
+html[data-wt-theme="dark"] .reveal-modal .option-list,
+html[data-wt-theme="dark"] .reveal-modal .option-list li,
+html[data-wt-theme="dark"] .fc-popover .fc-popover-header,
+html[data-wt-theme="dark"] .fc-popover .fc-popover-body {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+html[data-wt-theme="dark"] .reveal-modal h1,
+html[data-wt-theme="dark"] .reveal-modal h2,
+html[data-wt-theme="dark"] .reveal-modal h3,
+html[data-wt-theme="dark"] .reveal-modal h4,
+html[data-wt-theme="dark"] .reveal-modal h5,
+html[data-wt-theme="dark"] .reveal-modal h6,
+html[data-wt-theme="dark"] .reveal-modal p,
+html[data-wt-theme="dark"] .reveal-modal li,
+html[data-wt-theme="dark"] .reveal-modal label,
+html[data-wt-theme="dark"] .reveal-modal strong,
+html[data-wt-theme="dark"] .reveal-modal small,
+html[data-wt-theme="dark"] .reveal-modal .title,
+html[data-wt-theme="dark"] .reveal-modal .subheader,
+html[data-wt-theme="dark"] .reveal-modal td,
+html[data-wt-theme="dark"] .reveal-modal th,
+html[data-wt-theme="dark"] .fc-popover,
+html[data-wt-theme="dark"] .fc-popover * {
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .reveal-modal a:not(.button) { color: #cbb3e8 !important; }
+html[data-wt-theme="dark"] .reveal-modal .close-reveal-modal { color: #cfc4d8 !important; }
+html[data-wt-theme="dark"] .reveal-modal-bg { background: rgba(0,0,0,.66) !important; }
+html[data-wt-theme="dark"] .reveal-modal .button,
+html[data-wt-theme="dark"] .reveal-modal button:not([class*="wt-"]) {
+  background-color: #2a2a2e !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .reveal-modal .button:hover,
+html[data-wt-theme="dark"] .reveal-modal button:not([class*="wt-"]):hover {
+  background-color: #34343a !important;
+}
+html[data-wt-theme="dark"] .f-dropdown li,
+html[data-wt-theme="dark"] .f-dropdown a,
+html[data-wt-theme="dark"] .f-dropdown a:not(.button),
+html[data-wt-theme="dark"] .f-dropdown p,
+html[data-wt-theme="dark"] .selectize-dropdown .option,
+html[data-wt-theme="dark"] .selectize-dropdown .optgroup-header {
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .f-dropdown li:hover,
+html[data-wt-theme="dark"] .f-dropdown li.active,
+html[data-wt-theme="dark"] .selectize-dropdown .option.active,
+html[data-wt-theme="dark"] .selectize-dropdown .option:hover {
+  background-color: #2f2a35 !important;
+  color: #fff !important;
+}
+/* 课程卡右上的「⋮」菜单：外层 ul 已压暗，里面的 a 是站点 .sbx-button，自带白底，
+   结果就是浅字压白卡（实测对比度 1.25:1）。把它按透明处理。 */
+html[data-wt-theme="dark"] .f-dropdown li > a,
+html[data-wt-theme="dark"] .f-dropdown a.sbx-button--has-icon,
+html[data-wt-theme="dark"] .f-dropdown a.sbx-button,
+html[data-wt-theme="dark"] .f-dropdown a.button {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .f-dropdown li:hover > a,
+html[data-wt-theme="dark"] .f-dropdown a.sbx-button--has-icon:hover {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+html[data-wt-theme="dark"] .f-dropdown li:hover,
+html[data-wt-theme="dark"] .f-dropdown li > a:hover {
+  background-color: #2f2a35 !important;
+}
+/* 日期选择器（.adtp 自带 .reveal-modal，所以背景已压暗）的日历格与选中态 */
+html[data-wt-theme="dark"] .adtp .ui-datepicker-header,
+html[data-wt-theme="dark"] .adtp .ui-datepicker-title,
+html[data-wt-theme="dark"] .adtp table,
+html[data-wt-theme="dark"] .adtp td,
+html[data-wt-theme="dark"] .adtp th {
+  background-color: transparent !important;
+}
+html[data-wt-theme="dark"] .adtp td a,
+html[data-wt-theme="dark"] .adtp .ui-state-default { color: var(--wt-t-ink) !important; }
+html[data-wt-theme="dark"] .adtp td a:hover,
+html[data-wt-theme="dark"] .adtp .ui-state-hover {
+  background-color: #2f2a35 !important;
+  color: #fff !important;
+}
+html[data-wt-theme="dark"] .adtp .ui-state-active,
+html[data-wt-theme="dark"] .adtp td.active a {
+  background-color: #6c4a8a !important;
+  color: #fff !important;
+}
+
+/* 站点日期选择器用的是 flatpickr（.flatpickr-calendar）：它的白底写在插件自己的样式里，
+   外层 .adtp 已经压暗了，但日历本体还是白的，配上浅色文字就糊成一片。 */
+html[data-wt-theme="dark"] .flatpickr-calendar {
+  background: #1b1b1e !important;
+  color: var(--wt-t-ink) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.6) !important;
+  color-scheme: dark;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-months,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-month,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-weekdays,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-weekday,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-days,
+html[data-wt-theme="dark"] .flatpickr-calendar .dayContainer {
+  background: transparent !important;
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-weekday { color: var(--wt-t-ink-2) !important; }
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day {
+  background: transparent !important;
+  color: #dcd6e4 !important;
+  border-color: transparent !important;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day:hover,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day:focus {
+  background: #2f2a35 !important;
+  color: #fff !important;
+  border-color: #3a3344 !important;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.today { border-color: #6c4a8a !important; }
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.selected,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.startRange,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.endRange,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.inRange {
+  background: #6c4a8a !important;
+  color: #fff !important;
+  border-color: #6c4a8a !important;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.flatpickr-disabled,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.prevMonthDay,
+html[data-wt-theme="dark"] .flatpickr-calendar span.flatpickr-day.nextMonthDay { color: #5f5a68 !important; }
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-current-month,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-current-month .cur-year,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-current-month select,
+html[data-wt-theme="dark"] .flatpickr-calendar .numInputWrapper span {
+  background: transparent !important;
+  color: var(--wt-t-ink) !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-prev-month,
+html[data-wt-theme="dark"] .flatpickr-calendar .flatpickr-next-month { color: var(--wt-t-ink) !important; fill: var(--wt-t-ink) !important; }
+html[data-wt-theme="dark"] .flatpickr-calendar.arrowTop::after { border-bottom-color: #1b1b1e !important; }
+html[data-wt-theme="dark"] .flatpickr-calendar.arrowBottom::after { border-top-color: #1b1b1e !important; }
+
+/* 右上角头像的下拉菜单（#profile-options）：站点把它画成白卡片，文字是浅色，
+   暗色下几乎看不见。 */
+html[data-wt-theme="dark"] .profile-options,
+html[data-wt-theme="dark"] #profile-options,
+html[data-wt-theme="dark"] .profile-options-mobile,
+html[data-wt-theme="dark"] #profile-options-mobile {
+  background-color: #1b1b1e !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: 0 18px 44px rgba(0,0,0,.6) !important;
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] .profile-options li,
+html[data-wt-theme="dark"] .profile-options-mobile li { border-color: rgba(255,255,255,.08) !important; }
+html[data-wt-theme="dark"] .profile-options .account-menu__link,
+html[data-wt-theme="dark"] .profile-options a,
+html[data-wt-theme="dark"] .profile-options-mobile a { color: var(--wt-t-ink) !important; }
+html[data-wt-theme="dark"] .profile-options .account-menu__link:hover,
+html[data-wt-theme="dark"] .profile-options li:hover a,
+html[data-wt-theme="dark"] .profile-options-mobile a:hover {
+  background-color: #2f2a35 !important;
+  color: #fff !important;
+}
+html[data-wt-theme="dark"] .profile-options .account-menu__link svg,
+html[data-wt-theme="dark"] .profile-options-mobile svg { color: var(--wt-t-ink-2) !important; fill: currentColor; }
+html[data-wt-theme="dark"] .profile-options .account-menu__name,
+html[data-wt-theme="dark"] .profile-options .meta,
+html[data-wt-theme="dark"] .profile-options-mobile .meta { color: var(--wt-t-ink-2) !important; }
+
+/* ===== 岛屿标题栏那排图标按钮（含设置齿轮）整块变白 =====
+   站点给 a.sbx-icon-only-button.adtp-btn 写了
+   background-color: var(--sbx-config-color-active, var(--content-ui-background))，
+   而 --content-ui-background 是 #fff。于是点一下（aria-expanded=true）再点回来，
+   40×40 的按钮就是一块白砖。暗色下统一换成半透明白。 */
+html[data-wt-theme="dark"] a.sbx-icon-only-button.adtp-btn,
+html[data-wt-theme="dark"] .sbx-icon-only-button.adtp-btn,
+html[data-wt-theme="dark"] .adtp-btn {
+  background-color: rgba(255, 255, 255, .10) !important;
+  background-image: none !important;
+  color: var(--wt-t-ink) !important;
+}
+html[data-wt-theme="dark"] a.sbx-icon-only-button.adtp-btn:hover,
+html[data-wt-theme="dark"] .sbx-icon-only-button.adtp-btn:hover,
+html[data-wt-theme="dark"] a.sbx-icon-only-button[aria-expanded="true"],
+html[data-wt-theme="dark"] .sbx-icon-only-button[aria-expanded="true"] {
+  background-color: rgba(255, 255, 255, .18) !important;
+  color: #fff !important;
+}
+
+/* ===== 性能模式：只做「限制重绘范围」，不再关动画 =====
+   2026-11-15 用户要求：动画要保留，打开性能模式也得看得见 transition。
+   实测（tools/probe/scrollcost.mjs）滚动时本来就没有长任务、也没有 backdrop-filter，
+   所以这里只留 contain，把重绘限制在卡内。 */
+html.wt-perf [data-wesley-home] .wt-sec-body,
+html.wt-perf [data-wesley-home] .wt-task,
+html.wt-perf [data-wesley-home] .wt-due-card,
+html.wt-perf [data-wesley-home] .wt-custom-card {
+  contain: layout style;
+}
+
+/* ===== 平面化（2026-11-15）：常态下不要毛玻璃、不要投影 =====
+   只作用于我们自己注入的面板与浮层，站点自己的元素不动。
+   用阴影画的「状态环」（选中下划线、聚焦环）单独留回来，否则看不出状态。 */
+[data-wesley-home],
+[data-wesley-home] *,
+[data-wesley-home] *::before,
+[data-wesley-home] *::after,
+.wt-modal, .wt-modal *, .wt-modal-menu,
+.wt-toast, .wt-snackbar, .wt-confirm, .wt-confirm-floating,
+.wt-set-pop, .wt-dueset-pop, .wt-modal-caret,
+.wt-sr-card, .wt-sr-overlay, .wt-sr-overlay *, .wt-sr-setpanel, .wt-sr-fab,
+.wt-cal-pop, .wt-cal-box {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+/* 面板根节点自带 .wt-summary / .wt-card-effect-*，它们和上面那条同权重但写得更晚，
+   所以单独再点一次名，保证根的投影也被抹掉 */
+[data-wesley-home].wt-summary,
+[data-wesley-home][class*="wt-card-effect"],
+[data-wesley-home].wt-no-navglass { box-shadow: none !important; }
+
+/* 状态提示用的环，留着 */
+[data-wesley-home] .wt-tabs-editable .wt-tab { box-shadow: inset 0 -1px 0 rgba(100, 52, 111, .45) !important; }
+html[data-wt-theme="dark"] [data-wesley-home] .wt-tabs-editable .wt-tab { box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .30) !important; }
+[data-wesley-home] .wt-form input:focus,
+[data-wesley-home] .wt-form select:focus,
+[data-wesley-home] .wt-form textarea:focus { box-shadow: 0 0 0 2px rgba(100, 52, 111, .18) !important; }
+.wt-cal-cell.is-today { box-shadow: inset 0 0 0 1px var(--wt-t-accent, #64346f) !important; }
+html[data-wt-theme="dark"] .wt-cal-cell.is-today { box-shadow: inset 0 0 0 1px #b28be0 !important; }
+
+/* ===== 点两下按钮就变白 —— 站点 focus/hover 规则的锅 =====
+   站点有一条：
+     button:hover, button:focus, .button:hover, .adtp-btn:hover, … {
+       background-color: var(--sbx-color-foreground-primary,
+                         var(--sbx-config-color-active, var(--content-ui-hover)));
+     }
+   权重 0,1,1。我们自己给按钮写的单类选择器只有 0,1,0，压不过它；
+   `.wt-xxx:hover`(0,2,0) 只在指针悬停时能赢，鼠标一移开、焦点还留在按钮上，
+   那颗按钮就被涂成 --sbx-color-foreground-primary(#fff)，整块白砖。
+   顶栏那颗 settings 齿轮、Calendar 标题右边的小日历按钮都是这么变白的。
+
+   给 el() 造出来的节点统一打 data-wt-ui，在这颗元素上把站点这几个变量归零：
+   站点规则照样命中、照样赢，只是算出来是透明，配色交回我们自己的 token。
+   变量会往下继承，但我们的面板里没有别处用这几个站点变量，所以安全。 */
+[data-wt-ui]{
+  --sbx-color-foreground-primary:transparent;
+  --sbx-config-color-active:transparent;
+  --content-ui-background:transparent;
+  --content-ui-hover:transparent;
+}
+
+/* ===== 亮暗切换的过渡 =====
+   过渡表不写在这里：站点会把 <head> 里不认识的 <style> 清掉（实测 63ms），也会把
+   <html>/<body> 的 class 整份重写，所以挂在哪块 DOM 上都活不过一帧。
+   JS 改用 document.adoptedStyleSheets 临时加一张表（见 home.js 的 themeFlip()、search.js 的
+   themeScrim()），它不在 DOM 里，清不掉；换完主题 380ms 后摘掉，平时页面上没有任何 transition。
+   规则本身也已在 CSS 里留了一份副本，改的时候两边一起改：
+   html,html body,html body *:not(img):not(svg):not(path):not(video):not(canvas) {
+     transition: background-color .3s ease, color .3s ease, border-color .3s ease,
+                 fill .3s ease, stroke .3s ease, box-shadow .3s ease !important;
+   }
+   prefers-reduced-motion 下 JS 直接不挂。 */
+
+/* ===== /search 那套新版界面（sbx-*）=====
+   站点把搜索页换成了 .sbx-island / .empty-state-flex-centered，`.island` 那一串规则管不到，
+   深色下整页只剩白块。这里单独补一层，别跟着 .island 那条改，两条路都要。 */
+html[data-wt-theme="dark"] .sbx-island,
+html[data-wt-theme="dark"] .sbx-search-page{background:var(--wt-t-surface) !important;background-image:none !important;border-color:var(--wt-t-line) !important;color:var(--wt-t-ink) !important;}
+html[data-wt-theme="dark"] .sbx-island *{border-color:rgba(255,255,255,.09);}
+html[data-wt-theme="dark"] .empty-state-flex-centered,
+html[data-wt-theme="dark"] .sbx-search-page__results,
+html[data-wt-theme="dark"] .empty-state-flex-centered:hover{background:transparent !important;}
+html[data-wt-theme="dark"] .empty-state-flex-centered,
+html[data-wt-theme="dark"] .empty-state-flex-centered *{color:#a9a3b5 !important;}
+html[data-wt-theme="dark"] .sbx-island .filters label,
+html[data-wt-theme="dark"] .sbx-island .filters .label,
+html[data-wt-theme="dark"] .sbx-island .field-label{color:#cfcbd6 !important;}

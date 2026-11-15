@@ -1,0 +1,82 @@
+{
+  "manifest_version": 3,
+  "name": "Better WiSE page",
+  "version": "0.1.2.17",
+  "description": "Today plan, timetable and instant search for Wesley College WiSE.",
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_popup": "options.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://wise.wesleycollege.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://wise.wesleycollege.net/*"
+      ],
+      "js": [
+        "boot.js",
+        "color-fix.js"
+      ],
+      "run_at": "document_start",
+      "css": [
+        "theme.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://wise.wesleycollege.net/",
+        "https://wise.wesleycollege.net/home",
+        "https://wise.wesleycollege.net/dashboard",
+        "https://wise.wesleycollege.net/dashboard/*"
+      ],
+      "js": [
+        "home.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://wise.wesleycollege.net/*"
+      ],
+      "js": [
+        "pinyin-data.js",
+        "search.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg9gO2g5+NrHXuKYeK71IsbE8ZCclm1wOyD38psZXI+TX2aMM3L7AcdhQo+E4JeExbOlUqiW3R1UdejjDiE8US3YD8V6K61xvoCvxtvPUSHX9Styl8Cq7qmtvzpJeL/36WIdL3FontKtC5tVIuHQsYovYSKW5Aw5vVULbJvOq+7ZW9drkctkEXlAP2ZBPxnSBnJPpXb2yMvllu+35GZO+/iiu0caBUf9C8dMeWECQ1HAO/IcHiVi7Lq6mmLSYXYjdGe1iMX35PnH52SZhggfYJRdaV9SYeUWWWJpxFwQ+agocRgCbAs10fd3KGMRJa324ZlsKG30Qg+WYm6zog4scswIDAQAB",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "options.html",
+        "options.js",
+        "icons/settings.svg",
+        "theme.css"
+      ],
+      "matches": [
+        "https://wise.wesleycollege.net/*"
+      ]
+    }
+  ]
+}
