@@ -70,7 +70,7 @@ KEYBOARD
 
 INSTALL
 
-1. Unzip Better_WiSE_v0.1.3.zip
+1. Unzip Better_WiSE_v0.1.3.5.zip
 2. Open edge://extensions (or chrome://extensions) and turn on Developer mode
 3. Click "Load unpacked" and pick the unzipped folder
 4. Pin the icon if you want the toolbar popup on hand
@@ -85,7 +85,10 @@ wise.wesleycollege.net.
 
 NOTES
 
-- 0.1.3: the month picker in the next-day modal is larger and readable now
+- 0.1.3.5: the week chip and the day picker are two separate pills on the same
+  line, and picking a day keeps the day, the title and the timetable together
+  (the title used to say one day while the table showed another).
+- 0.1.3.4: the month picker in the next-day modal is larger and readable now
   (304 px wide, 26 px arrows, 30 px day cells), and app tiles lose saturation in
   dark mode the way timetable cards already did.
 

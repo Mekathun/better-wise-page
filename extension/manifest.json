@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Better WiSE page",
-  "version": "0.1.3",
+  "version": "0.1.3.5",
   "description": "Today plan, timetable and instant search for Wesley College WiSE.",
   "action": {
     "default_icon": {
