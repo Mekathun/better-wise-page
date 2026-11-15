@@ -1928,3 +1928,10 @@ Societies、VCE Maths Methods、Language and Literature Chinese、PE、Language 
   GitHub 仍是未登录。结论：要么用户自己在那台浏览器里点一次登录，要么走设备流。
 - 坑三：`git checkout -B <branch> FETCH_HEAD` 会把工作树重置成远端内容，未提交的改动直接没了。
   以后先提交或先 `reset --soft`，别在有脏工作树的时候切分支。
+
+- 修一个 0.1.3 期间暴露的运行时错误：`placePanel()` 用 `document.querySelector('[data-timetable-header]')`
+  找锚点，周末合成课表 `.wt-tt-body` 里也有同名 h2，选到它就等于把面板插进自己那张表里，
+  随后 `placeSynth()` 调 `panel.insertAdjacentElement('afterend', full)` 抛
+  `HierarchyRequestError: The new child element contains the parent`（每次 tick 抛一次）。
+  改成只认不在 `.wt-tt-body` 里的标题，并给 `placeSynth()` 加 `full.contains(panel)` 的短路与 try/catch。
+  复测：刷新后 `Runtime.exceptionThrown` 0 条，标题、面板、磁贴、日历都在。

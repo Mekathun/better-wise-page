@@ -1124,7 +1124,10 @@ html[data-wt-theme="dark"] .wt-cal-note.wt-cal-fail{color:#f0938c;}
   function placePanel(node) {
     if (!node) return false;
     renderWeekChip();
-    const anchor = document.querySelector('[data-timetable-header]');
+    /* 只认站点那张表上的标题。合成课表（.wt-tt-body）里也有同名的 h2，
+       选到它就会把面板塞进自己那张表里，后面挪位置时 insertAdjacentElement 直接抛
+       HierarchyRequestError（The new child element contains the parent）。 */
+    const anchor = [...document.querySelectorAll('[data-timetable-header]')].find((h) => !h.closest('.wt-tt-body'));
     if (anchor && anchor.parentElement) {
       node.classList.remove('wt-skel-block');   // 进了标题那一格就按正常面板宽度走
       anchor.insertAdjacentElement('afterend', node);
@@ -5447,7 +5450,10 @@ function buildSummary(state) {
       const panel = document.querySelector('[data-wesley-home]');
       /* 面板在就贴着面板摆；面板不在才退回按标题摆。 */
       if (panel && panel.parentElement) {
-        if (full.previousElementSibling !== panel) panel.insertAdjacentElement('afterend', full);
+        if (full === panel || full.contains(panel)) return;   /* 面板在这块里面，别自己套自己 */
+        if (full.previousElementSibling !== panel) {
+          try { panel.insertAdjacentElement('afterend', full); } catch (e) { /* 位置不对就先待着 */ }
+        }
         return;
       }
       if (!h || !h.parentElement) return;
