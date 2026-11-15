@@ -3,7 +3,7 @@
 > 把 Wesley College 的 WiSE 从「信息仓库」变成「今天该做什么」。
 > 一个装在浏览器里的增强层，不动学校系统一行代码，把散落在公告、附件、课程大纲里的东西收拢成一屏可用的东西。
 
-![version](https://img.shields.io/badge/version-0.1.2.13-6b3a79) ![platform](https://img.shields.io/badge/Edge%20%2F%20Chrome-Manifest%20V3-4a2057)
+![version](https://img.shields.io/badge/version-0.1.3-6b3a79) ![platform](https://img.shields.io/badge/Edge%20%2F%20Chrome-Manifest%20V3-4a2057)
 
 ---
 
@@ -224,12 +224,17 @@ build-extension.mjs  打包脚本（zip + CRX3 签名）
 
 ## 十、版本与维护
 
-当前 **0.1.2.13**。每条版本号规则：`manifest.json` / `options.html` / `options.js` 三处版本号必须一致，每次只 +1 最后一位。
+当前 **0.1.3**。每条版本号规则：`manifest.json` / `options.html` / `options.js` 三处版本号必须一致，每次只 +1 最后一位。
 
 主要里程碑：
 
 | 版本 | 内容 |
 |---|---|
+| 0.1.2.14 | 日次窗口改读 `/timetable` 的星期表（课名与教室同行，老师和编号不显示，没课的节次整行不出现）；标题栏加 `Day X` 与日历两枚按钮，日期选择器周末灰掉，选日期自动算 Day 几；`button{min-height:40px}` 把 Next day 与 ☰ 顶成胖药丸的问题修掉 |
+| 0.1.2.15 | 深色模式下应用磁贴（`ul.tileList li.tile`）与课表卡片同参数降饱和 |
+| 0.1.2.16 | 日期选择器放大（304px 宽、26px 箭头、30px 格子） |
+| 0.1.2.17 | 空节次文案改 No new posts；日期优先于 Day（手点 Day 只把日期格子调淡）；周日起头；周中标题写 Day N，只有周末才写 Showing；清掉调试输出；隐私口径改成不收集用户数据 |
+| 0.1.3 | 版本号收敛成三段；隐私页与商店文案去掉 AI 表述，并真正推到线上站点根目录 |
 | 0.0.128 | 合并 AI 双管线、429 熔断、课卡 `G/` 前缀修复 |
 | 0.0.129 | 窄屏模态修复、整页发黑修复、课卡溢出、Use AI 开关 |
 | 0.0.130 | 课卡文案去重、全局搜索初版 |

@@ -59,73 +59,63 @@
       <span>Better WiSE Page</span>
     </div>
     <h1>Privacy Policy</h1>
-    <p class="meta">Effective 4 November 2026 &middot; Last updated 4 November 2026</p>
+    <p class="meta">Effective 15 November 2026 &middot; Last updated 15 November 2026</p>
   </header>
 
-  <p>Better WiSE Page is a browser extension that improves the Wesley College WiSE learning platform.
-  This page explains exactly what the extension reads, where that data goes, and what it never does.
-  It is written to match what the shipped code actually does.</p>
+  <p>Better WiSE Page changes how the Wesley College WiSE portal looks: one panel for today, a week timetable
+  you can open, and a search box. It collects nothing about you. This page describes what the extension does
+  with the pages it reads, and what it stores on your own machine.</p>
 
-  <h2>What the extension does</h2>
-  <p>It runs only on <code>wise.wesleycollege.net</code> and adds a few things to that site: your next class,
-  a to-do list built from course announcements, an expandable timetable, and faster in-site search.
-  Nothing is collected on any other website, and the extension does not run anywhere else.</p>
+  <h2>Summary</h2>
+  <ul>
+    <li>The extension does not collect personal data.</li>
+    <li>There is no developer server, no account and no analytics.</li>
+    <li>Everything it reads stays in your browser tab and your own browser storage.</li>
+  </ul>
 
   <h2>What it reads</h2>
-  <ul>
-    <li>Page content you can already see while signed in to WiSE: class names, course announcements
-      (title and body text), timetable periods, and due dates. This is used only to draw cards and summaries on the page.</li>
-    <li>Settings you enter yourself: display and animation preferences, background colours, and — only if you
-      enable AI features — the API endpoint and API key you provide.</li>
-  </ul>
-  <p>The extension does not read your password, other tabs, your browsing history, your clipboard, or local files.
-  It does not use cookies for tracking and does not inject anything into pages you visit outside WiSE.</p>
+  <p>It runs only on <code>wise.wesleycollege.net</code>. On that site it reads what is already on the page
+  while you are signed in: class names, timetable periods, course announcements and their due dates.
+  That text is used to draw the cards and the summary panel, and it stays inside the page.</p>
+  <p>It does not read your password, other tabs, browsing history, the clipboard or local files. It does not
+  place tracking cookies. It is not injected into any other website.</p>
 
-  <h2>Where your data lives</h2>
+  <h2>What it stores</h2>
   <table>
-    <tr><th>Storage</th><td>Your own browser profile, via <code>chrome.storage.local</code> and <code>chrome.storage.sync</code>.</td></tr>
-    <tr><th>Server-side storage</th><td>None. The developer has no backend and receives no data.</td></tr>
-    <tr><th>Removal</th><td>Use <em>Clear all caches</em> in the extension settings, or uninstall the extension.</td></tr>
+    <tr><th>Location</th><td>Your own browser profile, through <code>chrome.storage.local</code>.</td></tr>
+    <tr><th>Contents</th><td>Your display settings: theme, animation speed, cards per row, background choices,
+      and which cards you hid. Plus a local cache of pages you already opened, so the panel can draw before the
+      site finishes loading.</td></tr>
+    <tr><th>Server storage</th><td>None. The developer has no backend and receives nothing.</td></tr>
+    <tr><th>Removal</th><td>Clear the caches in the extension settings, or uninstall the extension. Either one
+      deletes the stored data.</td></tr>
   </table>
 
-  <h2>When data leaves your device</h2>
-  <div class="callout">
-    <p>Only if you turn on <em>Use AI to optimise task list</em> and supply your own API key.</p>
-  </div>
-  <p>In that case the extension sends the title and body text of course announcements, plus a prompt,
-  straight from your browser to the AI endpoint you configured — by default the
-  <a href="https://ai.google.dev/gemini-api/terms" rel="noopener">Google Gemini API</a>. The request goes
-  from your machine directly to that provider; it does not pass through the developer. How Google handles
-  that content is governed by Google's own API terms and privacy policy.</p>
-  <p>With AI features switched off — the default — the extension makes no external requests at all.
-  Beyond that endpoint, the only hosts the extension is permitted to contact are
-  <code>wise.wesleycollege.net</code> (the site itself) and <code>login.microsoftonline.com</code>
-  (Microsoft sign-in, if your session needs refreshing).</p>
+  <h2>Network requests</h2>
+  <p>The extension talks to one host: <code>wise.wesleycollege.net</code>, using the session you already have.
+  It sends no data anywhere else. It includes no remote code; every script ships inside the package.</p>
 
   <h2>What it never does</h2>
   <ul>
-    <li>No accounts, no sign-up, no email address collected.</li>
-    <li>No analytics, telemetry, crash reporting, or advertising SDKs.</li>
-    <li>No sale, rental, or sharing of data with advertisers or data brokers.</li>
-    <li>No remote code — all logic ships inside the extension package.</li>
+    <li>No accounts, no sign-up, no email address.</li>
+    <li>No analytics, telemetry, crash reporting or advertising.</li>
+    <li>No sale, rental or sharing of data with anyone.</li>
+    <li>No reading of pages outside the WiSE site.</li>
   </ul>
 
   <h2>Student data</h2>
-  <p>The extension is used by students at Wesley College, and course announcements may concern minors.
-  That content stays in your own browser and is used only to generate summaries you can see.
-  The developer cannot access it. The single exception is described above: when you deliberately enable
-  the AI feature, announcement text is sent to the AI provider you selected, under your own API account.</p>
+  <p>The extension is used by students, and course content may concern minors. That content is displayed in
+  your browser and nowhere else. The developer cannot see it.</p>
 
   <h2>Your control</h2>
-  <p>You can disable AI features, clear all locally stored data, or uninstall the extension at any time from
-  the extension's settings page or your browser's extension manager. Nothing persists anywhere else.</p>
+  <p>Turn the panel off, clear the caches in settings, or uninstall the extension. Nothing persists after that.</p>
 
   <h2>Changes to this policy</h2>
-  <p>If the extension's data practices change, the date at the top of this page is updated and the change is
-  noted in the extension's release notes. Material changes will be described in the store listing update.</p>
+  <p>If the extension's behaviour changes, the date at the top of this page changes with it and the release
+  notes say what changed.</p>
 
   <h2>Contact</h2>
-  <p>Questions about this policy or the extension: <a href="mailto:chris.guo@wesleycollege.edu.au">chris.guo@wesleycollege.edu.au</a></p>
+  <p>Questions about this policy: <a href="mailto:chris.guo@wesleycollege.edu.au">chris.guo@wesleycollege.edu.au</a></p>
 
   <footer>
     Better WiSE Page is an independent student project and is not an official Wesley College product.

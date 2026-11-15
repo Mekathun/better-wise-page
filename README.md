@@ -2,7 +2,7 @@
 
 Wesley College WiSE 门户增强插件（浏览器扩展）的全部资料：源码、文档、会话记录、设计素材、宣传片。
 
-- 版本：0.1.2.17
+- 版本：0.1.3
 - 扩展 ID：`ecdedhcfflmobjlbcfanknhcpnnchefi`
 - 位置：`D:\DSH\Better_WiSE`（这个目录同时是 DSH 工作区，会话都在这）
 - 这份 README 写于 2026-11-03，之后 40 多轮的改动没回填。**当前状态以 `vault\` 为准。**
@@ -22,8 +22,8 @@ python vault\scripts\check.py    # 断链 / 缺属性 / 孤儿 / 超预算 / 敏
 
 ```
 D:\DSH\Better_WiSE\
-├─ Better_WiSE_v0.1.2.17.crx      双击安装（另有 0.0.1 → 0.1.2.17 的历史产物）
-├─ Better_WiSE_v0.1.2.17.zip      load unpacked
+├─ Better_WiSE_v0.1.3.crx      双击安装（另有 0.0.1 → 0.1.3 的历史产物）
+├─ Better_WiSE_v0.1.3.zip      load unpacked
 ├─ README.md
 │
 ├─ extension\                    开发目录（从老 workspace 整个搬来的）
@@ -95,8 +95,8 @@ D:\DSH\Better_WiSE\
 
 安装扩展：
 
-1. 双击 `Better_WiSE_v0.1.2.17.crx`。Edge 要先在 `edge://extensions` 打开开发者模式
-2. 或者解压 `Better_WiSE_v0.1.2.17.zip`，在 `edge://extensions` 里选「加载解压缩的扩展」
+1. 双击 `Better_WiSE_v0.1.3.crx`。Edge 要先在 `edge://extensions` 打开开发者模式
+2. 或者解压 `Better_WiSE_v0.1.3.zip`，在 `edge://extensions` 里选「加载解压缩的扩展」
 
 日常：
 

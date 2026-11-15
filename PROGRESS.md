@@ -1907,3 +1907,24 @@ Societies、VCE Maths Methods、Language and Literature Chinese、PE、Language 
 - 日期选择器放大一档（用户嫌图标看不清）：浮层 262→304 宽，`.wt-nd-calnav` 22→26 且字形 12→15px，
   月名 12→13.5px，星期行 9.5→10.5px，日期格 24→30 高、字号 11.5→12.5px，格间距 0→1px。
   实测浮层 304×224、格子 40×30、箭头按钮 26×26。
+
+## 第五十一轮（2026-11-15）— 0.1.3
+
+- 版本号收敛成三段：`0.1.2.17` → `0.1.3`。五处串（`extension/manifest.json`、
+  `extension/options.html` 的 `#footVer`、`extension/options.js` 的 MANIFEST 兜底、
+  `extension/PRODUCT.md` 的 badge 与「当前」行、`extension/README.txt`）都改了；
+  `PRODUCT.md` 里程碑表补了 0.1.2.14 → 0.1.3 五行。
+- 线上站点一直服务仓库根目录的 `index.html` / `privacy.html`，而改写后的版本只放在
+  `docs/github-pages/`，所以 `mekathun.github.io/better-wise-page` 上的隐私页还写着「会把你
+  自己的 API key 交给 AI」。这一轮把两份复制到根目录，AI 字样清零，Pages 跟 main 重建。
+- 产物：`Better_WiSE_v0.1.3.crx` / `.zip`，ID `ecdedhcfflmobjlbcfanknhcpnnchefi`。
+- 发布链路：本机没有 git 凭据，改用 GitHub OAuth 设备流（GitHub CLI 的公开 client_id
+  `178c6fc778ccc68e1d6a`，scope `repo`）拿一次性 token，只存在 `/d/tmp/gh.token`，推完即弃。
+  远端本来就有历史，本地仓库是新建的，所以用 `git reset --soft <remote-tip>` 把工作树挂到远端
+  之后，一次提交推上去，不强推也不改写历史。
+- 坑一：Edge 157 拒绝在默认 user-data-dir 上开 `--remote-debugging-port`
+  （`DevTools remote debugging requires a non-default data directory`）。
+  坑二：把 Edge profile 复制到别的目录启动，ABE（App-Bound Encryption）让 cookie 解不开，
+  GitHub 仍是未登录。结论：要么用户自己在那台浏览器里点一次登录，要么走设备流。
+- 坑三：`git checkout -B <branch> FETCH_HEAD` 会把工作树重置成远端内容，未提交的改动直接没了。
+  以后先提交或先 `reset --soft`，别在有脏工作树的时候切分支。
