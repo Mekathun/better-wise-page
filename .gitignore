@@ -1,0 +1,9 @@
+docs/
+vault/
+PROGRESS.md
+*.crx
+Better_WiSE_v*.zip
+Better_WiSE_v*.crx
+extension/wesley-cards-extension.zip
+tools/
+build/
